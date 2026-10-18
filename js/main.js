@@ -290,17 +290,26 @@ function loop(t){
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
-    // On passe en plein écran
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(err => {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen().then(() => {
+        // On tente de forcer le mode paysage (fonctionne sur Android)
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(err => {
+            console.log("Verrouillage paysage bloqué par le navigateur (normal sur iOS).");
+          });
+        }
+      }).catch(err => {
         console.log("Erreur plein écran :", err.message);
-        alert("Votre navigateur ne supporte pas le plein écran automatique. Essayez de tourner votre téléphone.");
       });
     }
   } else {
-    // On quitte le plein écran
     if (document.exitFullscreen) {
       document.exitFullscreen();
+      // On libère l'orientation
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
     }
   }
 }
