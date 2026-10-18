@@ -330,3 +330,12 @@ document.addEventListener('fullscreenchange', () => {
     if(typeof draw === 'function') draw();
   }, 300);
 });
+
+// Force la carte à se redessiner quand on tourne le téléphone
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    TX = null; // Vide le cache de la texture
+    TR = null; // Vide le cache du terrain
+    if(typeof draw === 'function') draw(); // Redessine la carte
+  }, 400); // On attend 0.4s que le téléphone ait fini de tourner
+});
