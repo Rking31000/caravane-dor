@@ -4,8 +4,7 @@
 
   function numberFromCell(cell) {
     if (!cell) return null;
-    const text = cell.textContent.replace(/\s/g, '').replace(',', '.');
-    const match = text.match(/-?\d+(?:\.\d+)?/);
+    const match = cell.textContent.replace(/\s/g, '').replace(',', '.').match(/-?\d+(?:\.\d+)?/);
     return match ? Number(match[0]) : null;
   }
 
@@ -16,12 +15,43 @@
     });
   }
 
+  function goodReferenceForRow(row) {
+    if (typeof G === 'undefined') return null;
+    const label = row.children[0] && row.children[0].textContent.toLowerCase();
+    if (!label) return null;
+    const item = G.find(function (good) { return label.includes(good[0].toLowerCase()); });
+    return item ? Number(item[1]) : null;
+  }
+
   function addBadge(cell, text) {
     if (!cell || cell.querySelector('.market-price-badge')) return;
     const badge = document.createElement('small');
     badge.className = 'market-price-badge';
     badge.textContent = text;
     cell.appendChild(badge);
+  }
+
+  function markPrice(cell, value, reference, mode) {
+    if (!cell || value === null) return;
+    cell.classList.remove('market-price-good', 'market-price-bad', 'market-price-neutral');
+
+    if (reference === null) {
+      cell.classList.add('market-price-neutral');
+      addBadge(cell, mode === 'buy' ? 'Prix d’achat' : 'Prix de vente');
+      return;
+    }
+
+    const ratio = value / reference;
+    const favorable = mode === 'buy' ? ratio <= 0.85 : ratio >= 1.15;
+    const unfavorable = mode === 'buy' ? ratio >= 1.15 : ratio <= 0.85;
+    const label = favorable
+      ? (mode === 'buy' ? 'Bon achat' : 'Bonne vente')
+      : unfavorable
+        ? (mode === 'buy' ? 'Achat cher' : 'Vente faible')
+        : 'Prix moyen';
+
+    cell.classList.add(favorable ? 'market-price-good' : unfavorable ? 'market-price-bad' : 'market-price-neutral');
+    addBadge(cell, label);
   }
 
   function updateMarketIndicators() {
@@ -39,22 +69,9 @@
 
       rows.forEach(function (row) {
         const cells = row.children;
-        const buy = buyIndex >= 0 ? numberFromCell(cells[buyIndex]) : null;
-        const sell = sellIndex >= 0 ? numberFromCell(cells[sellIndex]) : null;
-
-        if (buy !== null && cells[buyIndex]) {
-          cells[buyIndex].classList.remove('market-price-good', 'market-price-bad', 'market-price-neutral');
-          const good = sell !== null && buy < sell;
-          cells[buyIndex].classList.add(good ? 'market-price-good' : 'market-price-neutral');
-          addBadge(cells[buyIndex], good ? 'Bon achat' : 'Prix d’achat');
-        }
-
-        if (sell !== null && cells[sellIndex]) {
-          cells[sellIndex].classList.remove('market-price-good', 'market-price-bad', 'market-price-neutral');
-          const good = buy !== null && sell > buy;
-          cells[sellIndex].classList.add(good ? 'market-price-good' : 'market-price-neutral');
-          addBadge(cells[sellIndex], good ? 'Bonne vente' : 'Prix de vente');
-        }
+        const reference = goodReferenceForRow(row);
+        if (buyIndex >= 0) markPrice(cells[buyIndex], numberFromCell(cells[buyIndex]), reference, 'buy');
+        if (sellIndex >= 0) markPrice(cells[sellIndex], numberFromCell(cells[sellIndex]), reference, 'sell');
       });
     });
   }
