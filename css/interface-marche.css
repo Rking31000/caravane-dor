@@ -120,6 +120,43 @@
 .market-price-good .market-price-badge { color: var(--market-good); }
 .market-price-bad .market-price-badge { color: var(--market-bad); }
 
+/* Correction robuste des débordements du panneau et des tableaux injectés par JS. */
+#panel,
+#panel.wrap,
+.panel-box > .wrap {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+#panel table,
+.panel-box .wrap table {
+  display: table;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+#panel th,
+#panel td,
+.panel-box .wrap th,
+.panel-box .wrap td {
+  min-width: 0;
+  max-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#panel td button,
+.panel-box .wrap td button {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 820px) {
   .panel-box { padding: 5px; }
   .tabs { gap: 4px; }
@@ -130,4 +167,7 @@
   .panel-box td:first-child,
   .panel-box th:first-child { width: 20%; }
   .market-price-badge { font-size: 8px; }
+  #panel th,
+  #panel td { padding-left: 2px; padding-right: 2px; }
+  #panel td button { font-size: 10px; padding: 3px 2px; }
 }
