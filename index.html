@@ -1,96 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <title>Caravane d'Or</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/interface-marche.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Caravane d'Or</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/interface-marche.css">
 </head>
 <body>
-
 <header>
-  <h1>🐪 Caravane d'Or</h1>
-  <span id="phase">🌅 Jour</span>
-  <span class="stat-box gold">💰 <b id="gold">0</b></span>
-  <span class="stat-box">Richesse <b id="wealth">0</b></span>
-  <span class="stat-box">Jour <b id="day">0</b></span>
-  <span class="stat-box">🧭 <b id="km">0</b> km</span>
-  <span class="stat-box" id="water-box">💧 <b id="water">20</b></span>
-  <span class="stat-box" id="food-box">🍖 <b id="food">20</b></span>
-  <span class="stat-box renom">✦ <b id="ren">0</b></span>
-  <span id="sp"></span>
-  <button onclick="confirmNewGame()">Nouvelle carte</button>
-  <button onclick="saveGame()" title="Sauvegarder">💾</button>
-  <button onclick="loadGame()" title="Charger">📂</button>
-  <button onclick="giveUp()" title="Abandonner">🏳️</button>
-  <button onclick="toMenu()">☰ Menu</button>
-  <button onclick="SND=!SND;this.textContent=SND?'🔔':'🔕'">🔔</button>
-  <button id="btn-music" onclick="toggleMusic()">🎵</button>
-  <button onclick="toggleFullscreen()" id="btn-fullscreen" title="Plein écran / 16:9">⛶</button>
-  <div class="barwrap"><i id="barf"></i></div>
-  
+<h1>🐪 Caravane d'Or</h1>
+<span id="phase">🌅 Jour</span><span class="stat-box gold">💰 <b id="gold">0</b></span><span class="stat-box">Richesse <b id="wealth">0</b></span><span class="stat-box">Jour <b id="day">0</b></span><span class="stat-box">🧭 <b id="km">0</b> km</span><span class="stat-box" id="water-box">💧 <b id="water">20</b></span><span class="stat-box" id="food-box">🍖 <b id="food">20</b></span><span class="stat-box renom">✦ <b id="ren">0</b></span><span id="sp"></span>
+<button onclick="confirmNewGame()">Nouvelle carte</button><button onclick="saveGame()" title="Sauvegarder">💾</button><button onclick="loadGame()" title="Charger">📂</button><button onclick="giveUp()" title="Abandonner">🏳️</button><button onclick="toMenu()">☰ Menu</button><button onclick="SND=!SND;this.textContent=SND?'🔔':'🔕'">🔔</button><button id="btn-music" onclick="toggleMusic()">🎵</button><button onclick="toggleFullscreen()" id="btn-fullscreen" title="Plein écran / 16:9">⛶</button><div class="barwrap"><i id="barf"></i></div>
 </header>
-
-<div class="main" id="main-container">
-  
-  <div class="left-col">
-    <div class="canvas-box">
-      <canvas id="cv"></canvas>
-      <div id="tip"></div>
-      <div id="pops"></div>
-      <div id="info" style="min-height:32px"></div>
-      <div id="quick" style="display:flex;flex-wrap:wrap;gap:4px"></div>
-    </div>
-    
-    <div class="log-box closed" id="log-container" onclick="toggleLog()">
-      <div class="log-header">📜 Journal <span id="log-icon">▲</span></div>
-      <div id="log"></div>
-    </div>
-  </div>
-
-    <div class="right-col">
-    <div class="panel-box">
-      <div class="tabs">
-        <button id="tm" onclick="tab='m';ui()">Marché</button>
-        <button id="ta" onclick="tab='a';ui()">🔨 Ateliers</button>
-        <button id="tu" onclick="tab='u';ui()">Améliorations</button>
-        <button id="tc" onclick="tab='c';ui()">📜 Contrats</button>
-        <button id="ts" onclick="tab='s';ui()">📊</button>
-      </div>
-      <div id="panel" class="wrap"></div>
-    </div>
-  </div>
-
-  <div class="panel-toggle-tab" id="panel-tab" onclick="togglePanel()">◀ Menu</div>
-
-</div>
-
-<div id="menu"><div class="box">
-  <h1>🐪 Caravane d'Or</h1>
-  <p><i>Bâtissez une fortune de ville en ville avant la fin du voyage.</i></p>
-  <b>Difficulté</b>
-  <div class="opt" id="optd"></div>
-  <small id="dd"></small>
-  <p><b>Durée du voyage</b></p>
-  <div class="opt" id="optt"></div>
-  <p style="color:#8a2a2a;font-size:12.5px;margin-top:8px">
-    ⚠️ <b>Attention</b> : vous devez gérer votre eau 💧 et votre nourriture 🍖.<br>
-    Si l'un tombe à 0 en route, la caravane périt dans le désert.
-  </p>
-  <p><button style="font-size:18px;padding:8px 24px" onclick="startGame()">▶ Partir à l'aventure</button></p>
-  <div id="menuhs"></div>
-  <p style="margin-top:8px"><small><button onclick="loadGame()">📂 Charger une partie</button></small></p>
-</div></div>
-
-<div id="end"><div class="box" id="endb"></div></div>
-<div id="dead"></div>
-
-<script src="js/engine.js"></script>
-<script src="js/market.js"></script>
-<script src="js/storage.js"></script>
-<script src="js/main.js"></script>
-<script src="js/market-ui.js"></script>
-
+<div class="main" id="main-container"><div class="left-col"><div class="canvas-box"><canvas id="cv"></canvas><div id="tip"></div><div id="pops"></div><div id="info" style="min-height:32px"></div><div id="quick" style="display:flex;flex-wrap:wrap;gap:4px"></div></div><div class="log-box closed" id="log-container" onclick="toggleLog()"><div class="log-header">📜 Journal <span id="log-icon">▲</span></div><div id="log"></div></div></div><div class="right-col"><div class="panel-box"><div class="tabs"><button id="tm" onclick="tab='m';ui()">Marché</button><button id="ta" onclick="tab='a';ui()">🔨 Ateliers</button><button id="tu" onclick="tab='u';ui()">Améliorations</button><button id="tc" onclick="tab='c';ui()">📜 Contrats</button><button id="ts" onclick="tab='s';ui()">📊</button></div><div id="panel" class="wrap"></div></div></div><div class="panel-toggle-tab" id="panel-tab" onclick="togglePanel()">◀ Menu</div></div>
+<div id="menu"><div class="box"><h1>🐪 Caravane d'Or</h1><p><i>Bâtissez une fortune de ville en ville avant la fin du voyage.</i></p><b>Difficulté</b><div class="opt" id="optd"></div><small id="dd"></small><p><b>Durée du voyage</b></p><div class="opt" id="optt"></div><p style="color:#8a2a2a;font-size:12.5px;margin-top:8px">⚠️ <b>Attention</b> : vous devez gérer votre eau 💧 et votre nourriture 🍖.<br>Si l'un tombe à 0 en route, la caravane périt dans le désert.</p><p><button style="font-size:18px;padding:8px 24px" onclick="startGame()">▶ Partir à l'aventure</button></p><div id="menuhs"></div><p style="margin-top:8px"><small><button onclick="loadGame()">📂 Charger une partie</button></small></p></div></div><div id="end"><div class="box" id="endb"></div></div><div id="dead"></div>
+<script src="js/engine.js"></script><script src="js/market.js"></script><script src="js/storage.js"></script><script src="js/main.js"></script><script src="js/market-ui.js"></script><script src="js/map-zoom.js"></script>
 </body>
 </html>
