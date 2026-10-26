@@ -8,7 +8,7 @@
     if (!canvasBox || !canvas || document.getElementById('map-zoom-controls')) return;
 
     let zoom = 1;
-    const minZoom = 1;
+    const minZoom = 0.5;
     const maxZoom = 2.5;
     const step = 0.25;
 
