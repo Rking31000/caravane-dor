@@ -7,7 +7,10 @@
     const canvas = document.getElementById('cv');
     if (!canvasBox || !canvas || document.getElementById('map-zoom-controls')) return;
 
-    let zoom = 1;
+    // Le moteur de jeu possède déjà une caméra à 250 %. Les boutons
+    // modifient cette caméra au lieu de réduire visuellement le canvas.
+    const cameraRef = typeof camera !== 'undefined' ? camera : null;
+    let zoom = cameraRef && Number.isFinite(cameraRef.zoom) ? cameraRef.zoom : 2.5;
     const minZoom = 0.5;
     const maxZoom = 2.5;
     const step = 0.25;
@@ -20,19 +23,21 @@
     canvasBox.appendChild(controls);
 
     function render() {
-      canvas.style.transform = 'scale(' + zoom + ')';
-      canvas.style.transformOrigin = 'right bottom';
+      zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+      if (cameraRef) cameraRef.zoom = zoom;
+      canvas.style.transform = '';
       canvas.classList.toggle('map-is-zoomed', zoom !== 1);
       controls.querySelector('#map-zoom-in').disabled = zoom >= maxZoom;
       controls.querySelector('#map-zoom-out').disabled = zoom <= minZoom;
     }
 
     controls.querySelector('#map-zoom-in').addEventListener('click', function () {
-      zoom = Math.min(maxZoom, +(zoom + step).toFixed(2));
+      zoom = +(zoom + step).toFixed(2);
       render();
     });
+
     controls.querySelector('#map-zoom-out').addEventListener('click', function () {
-      zoom = Math.max(minZoom, +(zoom - step).toFixed(2));
+      zoom = +(zoom - step).toFixed(2);
       render();
     });
 
