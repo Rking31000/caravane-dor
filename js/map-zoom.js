@@ -11,7 +11,7 @@
     // modifient cette caméra au lieu de réduire visuellement le canvas.
     const cameraRef = typeof camera !== 'undefined' ? camera : null;
     let zoom = cameraRef && Number.isFinite(cameraRef.zoom) ? cameraRef.zoom : 2.5;
-    const minZoom = 0.5;
+    const minZoom = 1;
     const maxZoom = 2.5;
     const step = 0.25;
 
