@@ -104,34 +104,7 @@ td:first-child,th:first-child{text-align:left}
 #log div{padding:1px 0}
 #log::-webkit-scrollbar,.wrap::-webkit-scrollbar,.contracts-box::-webkit-scrollbar{width:8px}
 #log::-webkit-scrollbar-thumb,.wrap::-webkit-scrollbar-thumb,.contracts-box::-webkit-scrollbar-thumb{background:#b8862a;border-radius:4px}
-/* Conteneur des effets visuels sur la carte */
 #pops { position: absolute; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
-/* L'effet de texte qui s'envole */
-.pop { position: absolute; font-weight: bold; font-size: 16px; font-family: 'Georgia', serif; text-shadow: 0 2px 4px #000, 0 0 6px #fff; animation: up 1.2s forwards; white-space: nowrap; transform: translate(-50%, -50%); }
-.pop.g { color: #6fbf73; }
-.pop.r { color: #ff7d7d; }
-@keyframes up { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -150%) scale(0.8); opacity: 0; } }
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-td,th{padding:2px 3px;border-bottom:1px solid var(--bd);text-align:right}
-td:first-child,th:first-child{text-align:left}
-.tabs{display:flex;gap:4px;margin-bottom:5px;flex-shrink:0}
-.g{color:var(--ok)}.r{color:var(--bad)}
-#end{position:fixed;top:0;left:0;right:0;bottom:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:20}
-#end .box{max-width:380px;width:90%;text-align:center;padding:16px;background:var(--pn);border:2px solid var(--bd);border-radius:10px}
-#menu{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(#4a3216,#120a04);display:flex;align-items:center;justify-content:center;z-index:30;padding:12px}
-#menu .box{max-width:460px;width:100%;text-align:center;padding:18px;background:var(--pn);border:2px solid var(--bd);border-radius:10px}
-#menu h1{color:#8a5a10;font-size:28px;text-shadow:1px 1px 0 #fff8}
-.opt{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
-#dead{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%, #2a0808 0%, #000 75%);overflow:hidden}
-#dead .box{position:relative;text-align:center;padding:30px 38px;background:linear-gradient(#2a1a0a,#150a04);border:3px solid #8a2a2a;border-radius:14px;color:#f0d0a0;max-width:560px;width:92%;z-index:2;animation:deadAppear .6s ease-out}
-#dead .skull{font-size:76px;line-height:1;filter:drop-shadow(0 0 20px #a00);animation:skullPulse 2s infinite ease-in-out}
-#dead h1{color:#e05050;font-size:36px;margin:6px 0 4px;letter-spacing:4px;font-variant:small-caps;text-shadow:0 0 20px #a00,0 0 40px #800;animation:deadPulse 1.6s infinite}
-#dead .reason{color:#f0a060;font-size:16px;margin:6px 0 14px;font-style:italic}
-#dead .lore{color:#a08060;font-size:13px;font-style:italic;margin:10px 0;line-height:1.5}
-#dead .stats{color:#d0b080;font-size:14px;line-height:1.7;margin:14px 0 20px;border-top:1px solid #5a3020;border-bottom:1px solid #5a3020;padding:12px 0}
-#dead .stats b{color:#f1c453}
-#dead button{font-size:15px;padding:8px 20px;margin:0 4px;background:linear-gradient(#a83a3a,#6a1010);border-color:#300}
-#dead button:hover{filter:brightness(1.15)}
 @keyframes deadAppear{0%{transform:scale(.4) rotate(-8deg);opacity:0}60%{transform:scale(1.06) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
 @keyframes deadPulse{0%,100%{text-shadow:0 0 20px #a00,0 0 40px #800}50%{text-shadow:0 0 34px #f44,0 0 70px #a00}}
 @keyframes skullPulse{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.12) rotate(4deg)}}
@@ -139,10 +112,7 @@ td:first-child,th:first-child{text-align:left}
 @keyframes falling{0%{transform:translateY(-80px) rotate(0deg);opacity:0}10%{opacity:.85}90%{opacity:.6}100%{transform:translateY(110vh) rotate(540deg);opacity:0}}
 body.shake{animation:screenShake .6s}
 @keyframes screenShake{0%,100%{transform:translate(0,0)}15%{transform:translate(-10px,6px)}30%{transform:translate(8px,-4px)}45%{transform:translate(-7px,5px)}60%{transform:translate(5px,-3px)}75%{transform:translate(-5px,4px)}90%{transform:translate(3px,-2px)}}
-/* =========================================================
-   RESPONSIVE MOBILE
-   ========================================================= */
-/* 1. Téléphone en mode PORTRAIT (Vertical) */
+
 @media (max-width: 820px) and (orientation: portrait) {
   html, body { overflow: auto; height: auto; }
   body { min-height: 100vh; }
@@ -153,7 +123,6 @@ body.shake{animation:screenShake .6s}
   header b { font-size: 13px; }
   header { gap: 4px 8px; padding: 4px 8px; }
 }
-/* 2. Téléphone en mode PAYSAGE (Horizontal / Plein écran) */
 @media (orientation: landscape) and (max-height: 600px) {
   html, body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; margin: 0; padding: 0; }
   header { padding: 4px 8px; gap: 4px 8px; flex-shrink: 0; flex-wrap: nowrap; overflow-x: auto; }
@@ -177,17 +146,7 @@ body.shake{animation:screenShake .6s}
   .tabs { flex-wrap: wrap; }
   .tabs button { padding: 4px; font-size: 11px; }
 }
-#close-panel-btn {
-  margin-left: auto;
-  background: linear-gradient(#c58a3a,#98611a);
-  color: #fff;
-  display: none;
-}
+#close-panel-btn { margin-left: auto; background: linear-gradient(#c58a3a,#98611a); color: #fff; display: none; }
 #close-panel-btn:hover { filter: brightness(1.2); }
 
-/* Rétractable latéral avec effet slide à droite */
-.main.panel-closed .panel-toggle-tab {
-  right: 8px;
-}
-
-        
+.main.panel-closed .panel-toggle-tab { right: 8px; }
