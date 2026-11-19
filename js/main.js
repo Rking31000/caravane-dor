@@ -179,43 +179,6 @@ cv.onmousemove = ev => {
   
   const t = $('tip');
   const b = getCityAtMouse(mx, my);
-  
-  // --- AJOUT : Changement du curseur ---
-  if(b == null){ 
-      t.style.display='none'; 
-      cv.style.cursor = 'crosshair'; // Curseur par défaut de la carte
-      return; 
-  }
-  cv.style.cursor = 'pointer'; // Curseur "main" quand on survole une ville
-  // ------------------------------------
-  
-  const c = S.C[b], k = known(c, hops()), rep = c.rep||0;
-  let h = '<h4>'+c.name+'</h4><small>'+SZ[c.sz]+' · '+c.b+(k&&c.ev?' · '+EVN[c.ev.t]:'')+'</small>';
-  if(rep !== 0) h += '<div class="'+(rep>0?'g':'r')+'">⭐ Réputation : '+(rep>0?'+':'')+rep+'</div>';
-  
-  if(k){
-    const avgBuy = g => S.stats.bought[g]>0 ? S.stats.spentOn[g]/S.stats.bought[g] : G[g][1];
-    h += '<div style="border-top:1px solid #7a5420;margin-top:3px"><small>Bien</small><small>Achat / Vente</small></div>';
-    G.forEach((g,i) => {
-      const r = i < 9 ? price(c,i)/g[1] : 1, mine = S.inv[i], diff = mine>0 ? Math.round(sellP(c,i) - avgBuy(i)) : 0;
-      h += '<div><span>'+g[2]+' '+g[0]+(mine?' <small style="opacity:.7">('+mine+')</small>':'')+'</span><b class="'+(r<.9?'g':r>1.3?'r':'')+'">'+buyP(c,i)+' / '+sellP(c,i)+(mine>0?' <small class="'+(diff>=0?'g':'r')+'">'+(diff>=0?'+':'')+diff+'</small>':'')+'</b></div>';
-    });
-    h += '<div style="margin-top:3px;border-top:1px solid #7a5420;padding-top:3px;font-size:11px">💧 '+(2 + c.sz)+' or/u · 🍖 '+Math.round(3 + c.sz*1.5)+' or/u</div>';
-  } else h += '<br><i>Ville inconnue.</i>';
-  
-  t.innerHTML = h; t.style.display = 'block';
-  t.style.left = Math.max(4, Math.min(mx+18, r.width-t.offsetWidth+4))+'px';
-  t.style.top = Math.max(4, Math.min(my+8, r.height-t.offsetHeight+4))+'px';
-};
-cv.onmousemove = ev => {
-  const r = cv.getBoundingClientRect();
-  const mx = ev.clientX - r.left;
-  const my = ev.clientY - r.top;
-  mousePos.x = mx; mousePos.y = my;
-  isMouseOver = true;
-  
-  const t = $('tip');
-  const b = getCityAtMouse(mx, my);
   const road = getRoadAtMouse(mx, my);
   
   // Gestion du curseur
