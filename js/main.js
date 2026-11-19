@@ -113,6 +113,8 @@ function ui(){
 
 
 function toggleLog() { const logBox = document.getElementById('log-container'); logBox.classList.toggle('closed'); document.getElementById('log-icon').textContent = logBox.classList.contains('closed') ? '▲' : '▼'; setTimeout(() => { TR = null; draw(); }, 320); }
+function closePanel(){ const p = $('overlay-panel'); if(p) p.classList.add('hidden'); }
+function openPanel(){ const p = $('overlay-panel'); if(p) p.classList.remove('hidden'); ui(); }
 function confirmNewGame(){ if(S && !S.over && !confirm('Abandonner la partie en cours et recommencer ?')) return; newGame(); }
 function toMenu(){ speed=0;  bgMusic.pause(); $('end').style.display='none'; $('dead').style.display='none'; $('menu').style.display='flex'; menu(); }
 function restartAfterDeath(){ $('dead').style.display='none'; newGame(); }
@@ -169,7 +171,7 @@ function getCityAtMouse(mx, my) {
   });
   return best;
 }
-cv.onclick = ev => { const r = cv.getBoundingClientRect(); const b = getCityAtMouse(ev.clientX - r.left, ev.clientY - r.top); if(b != null){ sel=b; ui(); } };
+cv.onclick = ev => { const r = cv.getBoundingClientRect(); const b = getCityAtMouse(ev.clientX - r.left, ev.clientY - r.top); if(b != null){ sel=b; ui(); if(b === S.cur && !S.travel) openPanel(); } else closePanel(); };
 cv.onmousemove = ev => {
   const r = cv.getBoundingClientRect();
   const mx = ev.clientX - r.left;
