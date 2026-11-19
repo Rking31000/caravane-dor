@@ -572,7 +572,10 @@ document.addEventListener('click', () => {
   if (MUS && bgMusic.paused && S && !S.over) bgMusic.play().catch(e => {});
 });
 window.addEventListener('error', e => { console.error('Non géré:', e.message); if(S && !S.over){ log('⚠️ Erreur : '+e.message,'r'); } });
-document.addEventListener('click', e => { const p = $('overlay-panel'); if(p && !p.classList.contains('hidden') && !p.contains(e.target)) closePanel(); });
+document.addEventListener('click', e => {
+  const p = $('overlay-panel');
+  if(p && !p.classList.contains('hidden') && !p.contains(e.target)) closePanel();
+});
 function ensureAudio(){ if(!AC) try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} if(AC && AC.state=='suspended') AC.resume(); if(AC && !MG){ MG = AC.createGain(); MG.gain.value=.5; MG.connect(AC.destination); mt=AC.currentTime+.1; } }
 function ding(f,v){ if(!SND||!AC) return; const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime; o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.0001,t+.9); o.connect(g); g.connect(AC.destination); o.start(); o.stop(t+.9); }
 const mf=m=>440*Math.pow(2,(m-69)/12), CH=[[50,53,57],[46,50,53],[48,52,55],[50,53,57],[50,53,57],[46,50,53],[48,52,55],[45,49,52]], ML=[[74,0,77,0,81,0,77,74],[74,0,77,0,82,0,81,77],[76,0,79,0,84,0,79,76],[74,77,81,0,86,0,81,77],[74,0,77,81,0,81,77,74],[70,0,74,77,0,82,77,74],[72,0,76,79,0,84,79,76],[69,73,76,81,0,76,73,69]];
