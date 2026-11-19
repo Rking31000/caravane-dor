@@ -1,8 +1,8 @@
 :root {
-  --market-good: #246b2b;
-  --market-good-bg: #dff2df;
-  --market-bad: #9b2929;
-  --market-bad-bg: #f8dddd;
+  --market-good: #1a7a1a;
+  --market-good-bg: #e8f5e9;
+  --market-bad: #c62828;
+  --market-bad-bg: #ffebee;
   --market-neutral-bg: #f5ecd2;
 }
 
@@ -88,19 +88,23 @@
 .market-price-neutral {
   border-radius: 5px;
   font-weight: bold;
+  padding: 2px 6px;
 }
 
 .market-price-good {
-  color: var(--market-good) !important;
-  background: var(--market-good-bg) !important;
+  color: #fff !important;
+  background: var(--market-good) !important;
+  box-shadow: inset 0 0 0 1px var(--market-good);
 }
 
 .market-price-bad {
-  color: var(--market-bad) !important;
-  background: var(--market-bad-bg) !important;
+  color: #fff !important;
+  background: var(--market-bad) !important;
+  box-shadow: inset 0 0 0 1px var(--market-bad);
 }
 
 .market-price-neutral {
+  color: var(--ink) !important;
   background: var(--market-neutral-bg) !important;
 }
 
@@ -115,8 +119,9 @@
   overflow-wrap: anywhere;
 }
 
-.market-price-good .market-price-badge { color: var(--market-good); }
-.market-price-bad .market-price-badge { color: var(--market-bad); }
+.market-price-good .market-price-badge { color: #fff; font-weight: bold; }
+.market-price-bad .market-price-badge { color: #fff; font-weight: bold; }
+.market-price-neutral .market-price-badge { color: var(--ink); }
 
 /* Les cellules ne doivent pas être réduites à 0 : cela masquait les boutons du marché. */
 #panel,
