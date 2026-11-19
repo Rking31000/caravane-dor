@@ -103,7 +103,7 @@ function newGame(){
  S.contracts = [genContract(), genContract(), genContract()];
  computeFog(); sel=null; $('end').style.display='none'; $('dead').style.display='none';
  log('Votre caravane quitte '+C[cur].name+'. Bonne route, marchand !');
- autoSave(); ui(); openPanel();
+ autoSave(); ui();
 }
 
 function hops(){const o=S.travel?S.travel.from:S.cur,h={[o]:0},q=[o];while(q.length){const i=q.shift();S.C[i].adj.forEach(x=>{if(!(x.to in h)){h[x.to]=h[i]+1;q.push(x.to)}})}return h}
@@ -171,7 +171,7 @@ function step(dt){
       if(!c.q && R()<.3 && c.sz>0){ const g = ri(0,7), n = ri(4,10); c.q = {g, n, rew:Math.round(n*G[g][1]*2), exp:S.day+15}; log('📜 Quête à '+c.name+' : '+n+'× '+G[g][0]+' pour '+c.q.rew+' or'); }
       checkAutoDeliveries();
       if(S.water < 8 || S.food < 8) log('⚠️ Provisions faibles ! Achetez eau/nourriture ici.','r');
-      if(S.path.length && !(c.ev && 0)) leg(); else { ui(); if(!S.travel && !S.over) openPanel(); }
+      if(S.path.length && !(c.ev && 0)) leg(); else { ui(); }
     }
   }
   while(S.t >= 1 && !S.over){ S.t -= 1; dayTick(); }
@@ -567,7 +567,10 @@ function draw(){
 
   if(mv && performance.now()>nb){ nb = performance.now() + (S.slow>0?630:393); hoof(hk^=1); }
 }
-document.addEventListener('click', ensureAudio);
+document.addEventListener('click', () => {
+  ensureAudio();
+  if (MUS && bgMusic.paused && S && !S.over) bgMusic.play().catch(e => {});
+});
 window.addEventListener('error', e => { console.error('Non géré:', e.message); if(S && !S.over){ log('⚠️ Erreur : '+e.message,'r'); } });
 document.addEventListener('click', e => { const p = $('overlay-panel'); if(p && !p.classList.contains('hidden') && !p.contains(e.target)) closePanel(); });
 function ensureAudio(){ if(!AC) try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} if(AC && AC.state=='suspended') AC.resume(); if(AC && !MG){ MG = AC.createGain(); MG.gain.value=.5; MG.connect(AC.destination); mt=AC.currentTime+.1; } }
