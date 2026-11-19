@@ -171,7 +171,18 @@ function getCityAtMouse(mx, my) {
   });
   return best;
 }
-cv.onclick = ev => { const r = cv.getBoundingClientRect(); const b = getCityAtMouse(ev.clientX - r.left, ev.clientY - r.top); if(b != null){ sel=b; ui(); if(b === S.cur && !S.travel) openPanel(); } else closePanel(); };
+cv.onclick = ev => { 
+  const r = cv.getBoundingClientRect(); 
+  const b = getCityAtMouse(ev.clientX - r.left, ev.clientY - r.top); 
+  if(b != null){ 
+    sel = b; 
+    ui(); 
+    // Si on clique sur la ville actuelle de la caravane, on ouvre l'overlay
+    if(b === S.cur && !S.travel) openPanel(); 
+  } else {
+    // Si on clique dans le vide, on ne ferme plus forcément pour éviter les erreurs de clic
+  }
+};
 cv.onmousemove = ev => {
   const r = cv.getBoundingClientRect();
   const mx = ev.clientX - r.left;
