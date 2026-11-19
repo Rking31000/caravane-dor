@@ -516,7 +516,7 @@ function draw(){
 
   const bob = S.travel && speed ? Math.sin(performance.now()/110)*2*camera.zoom : 0;
   const dir = S.travel ? (P(S.C[S.travel.to])[0] < P(S.C[S.travel.from])[0] ? -1 : 1) : CD; CD = dir;
-  if(S.travel){ const a = P(S.C[S.travel.from]), b = P(S.C[S.travel.to]), l = Math.hypot(b[0]-a[0], b[1]-a[1]) || 1; CV = [(b[0]-a[0])/l, (b[1]-a[1])/l]; }
+  if(S.travel){ const a = P(S.C[S.travel.from]), b = P(S.C[S.travel.to]), l = Math.hypot(b[0]-a[0], b[1]-a[1]) || 1; CV = [(b[0]-a[0])/l, (b[1]-a[1])/l]; } else { CV = [1, 0]; }
 
   const scaleBase = Math.min(ZW/1000, ZH/640);
   cx.save(); cx.translate(pos[0],pos[1]); cx.scale(scaleBase*1.15, scaleBase*1.15); cx.translate(-pos[0],-pos[1]);
@@ -568,6 +568,7 @@ function draw(){
   if(mv && performance.now()>nb){ nb = performance.now() + (S.slow>0?630:393); hoof(hk^=1); }
 }
 document.addEventListener('click', ensureAudio);
+window.addEventListener('error', e => { console.error('Non géré:', e.message); if(S && !S.over){ log('⚠️ Erreur : '+e.message,'r'); } });
 function ensureAudio(){ if(!AC) try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} if(AC && AC.state=='suspended') AC.resume(); if(AC && !MG){ MG = AC.createGain(); MG.gain.value=.5; MG.connect(AC.destination); mt=AC.currentTime+.1; } }
 function ding(f,v){ if(!SND||!AC) return; const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime; o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.0001,t+.9); o.connect(g); g.connect(AC.destination); o.start(); o.stop(t+.9); }
 const mf=m=>440*Math.pow(2,(m-69)/12), CH=[[50,53,57],[46,50,53],[48,52,55],[50,53,57],[50,53,57],[46,50,53],[48,52,55],[45,49,52]], ML=[[74,0,77,0,81,0,77,74],[74,0,77,0,82,0,81,77],[76,0,79,0,84,0,79,76],[74,77,81,0,86,0,81,77],[74,0,77,81,0,81,77,74],[70,0,74,77,0,82,77,74],[72,0,76,79,0,84,79,76],[69,73,76,81,0,76,73,69]];
