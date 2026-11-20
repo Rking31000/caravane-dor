@@ -1,4 +1,4 @@
-/* Amélioration visuelle indépendante des mécaniques du marché. */
+/* AmÃ©lioration visuelle indÃ©pendante des mÃ©caniques du marchÃ©. */
 (function () {
   'use strict';
 
@@ -37,7 +37,7 @@
 
     if (reference === null) {
       cell.classList.add('market-price-neutral');
-      addBadge(cell, mode === 'buy' ? 'Prix d’achat' : 'Prix de vente');
+      addBadge(cell, mode === 'buy' ? 'Prix dâ€™achat' : 'Prix de vente');
       return;
     }
 
@@ -49,14 +49,16 @@
       : unfavorable
         ? (mode === 'buy' ? 'Achat cher' : 'Vente faible')
         : 'Prix moyen';
-    const arrow = favorable ? '▲' : unfavorable ? '▼' : '';
+    const arrow = favorable ? 'â–²' : unfavorable ? 'â–¼' : '';
 
     cell.classList.add(favorable ? 'market-price-good' : unfavorable ? 'market-price-bad' : 'market-price-neutral');
     addBadge(cell, label, arrow);
   }
 
   function updateMarketIndicators() {
-    document.querySelectorAll('.panel-box table').forEach(function (table) {
+    const scope = document.getElementById('panel') || document.querySelector('.panel-box');
+    if (!scope) return;
+    scope.querySelectorAll('table').forEach(function (table) {
       const header = table.querySelector('thead tr') || table.querySelector('tr');
       if (!header) return;
       const headers = header.children;
@@ -89,7 +91,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     scheduleUpdate();
-    const panel = document.getElementById('panel');
+    const panel = document.getElementById('panel') || document.body;
     if (panel) new MutationObserver(scheduleUpdate).observe(panel, { childList: true, subtree: true });
   });
 }());
