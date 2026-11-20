@@ -23,11 +23,11 @@
     return item ? Number(item[1]) : null;
   }
 
-  function addBadge(cell, text) {
+  function addBadge(cell, text, arrow) {
     if (!cell || cell.querySelector('.market-price-badge')) return;
     const badge = document.createElement('small');
     badge.className = 'market-price-badge';
-    badge.textContent = text;
+    badge.textContent = (arrow || '') + ' ' + text;
     cell.appendChild(badge);
   }
 
@@ -49,9 +49,10 @@
       : unfavorable
         ? (mode === 'buy' ? 'Achat cher' : 'Vente faible')
         : 'Prix moyen';
+    const arrow = favorable ? '▲' : unfavorable ? '▼' : '';
 
     cell.classList.add(favorable ? 'market-price-good' : unfavorable ? 'market-price-bad' : 'market-price-neutral');
-    addBadge(cell, label);
+    addBadge(cell, label, arrow);
   }
 
   function updateMarketIndicators() {

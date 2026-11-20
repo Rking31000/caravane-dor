@@ -122,6 +122,8 @@
 .market-price-good .market-price-badge { color: #fff; font-weight: bold; }
 .market-price-bad .market-price-badge { color: #fff; font-weight: bold; }
 .market-price-neutral .market-price-badge { color: var(--ink); }
+.market-price-good .market-price-badge::before { content: '▲ '; }
+.market-price-bad .market-price-badge::before { content: '▼ '; }
 
 /* Les cellules ne doivent pas être réduites à 0 : cela masquait les boutons du marché. */
 #panel,
