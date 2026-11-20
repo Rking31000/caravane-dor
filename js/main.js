@@ -79,7 +79,7 @@ function ui(){
       html = '<p>🐪 En route vers <b>'+S.C[S.travel.to].name+'</b>… ('+pct+' % — '+remainingKm+' km)</p><p style="color:'+(canFinish?'#3a7a2a':'#c0392b')+';font-weight:bold">'+(canFinish ? '✅ Provisions suffisantes' : '⚠️ Provisions INSUFFISANTES !')+'</p><p style="font-size:12px;color:#8a7c66">Reste à consommer : '+remainingUnits+' 💧 / '+remainingUnits+' 🍖</p>';
     } else {
       const rep = c.rep||0, repCls = rep>0?'g':rep<0?'r':'';
-      html = '<b>'+c.name+'</b> — '+SZ[c.sz]+' '+c.b+(c.ev?' · '+EVN[c.ev.t]:'')+'<br><span class="'+repCls+'">⭐ Réputation : '+(rep>0?'+':'')+rep+'</span><br>Charge : '+load()+'/'+cap()+'<br>';
+      html = '<b>'+c.name+'</b> — '+SZ[c.sz]+' '+c.b+(c.ev?' · '+EVN[c.ev.t]:'')+'<br><span class="'+repCls+'">⭐ Réputation : '+(rep>0?'+':'')+rep+'</span> · 💰 Or : <b style="color:#8a6508">'+Math.round(S.gold)+'</b><br>Charge : '+load()+'/'+cap()+'<br>';
       if(S.travel || S.over || (c.ev && c.ev.t=='epi')) html += '<p class="r">Marché fermé.</p>';
       else html += htmlSupplies(c);
       const visibleIdx = []; for(let i=0;i<9;i++) visibleIdx.push(i); for(let i=9;i<G.length;i++){ if(S.inv[i] > 0 || c.s[i] > 0) visibleIdx.push(i); }
