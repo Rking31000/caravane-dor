@@ -1,0 +1,87 @@
+/* =========================================================
+   TUTORIEL GUIDÉ — bulles contextuelles
+   ========================================================= */
+.tuto-option{
+  margin:10px 0 6px;
+  font-size:13px;
+  color:#5a3a10;
+}
+.tuto-option label{
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 10px;
+  border:1.5px dashed #b8862a;
+  border-radius:8px;
+  background:#fdf6e3;
+}
+.tuto-option input{
+  width:16px;
+  height:16px;
+  accent-color:#a0661e;
+  cursor:pointer;
+}
+
+#tutorial-overlay{
+  position:fixed;
+  inset:0;
+  z-index:20000;
+  display:none;
+  pointer-events:none;
+}
+#tutorial-highlight{
+  position:absolute;
+  border:3px solid #f1c453;
+  border-radius:12px;
+  box-shadow:0 0 0 9999px rgba(12,6,0,.74), 0 0 22px #f1c453, inset 0 0 14px #f1c45366;
+  pointer-events:none;
+  transition:left .25s ease, top .25s ease, width .25s ease, height .25s ease;
+}
+#tutorial-card{
+  position:absolute;
+  width:340px;
+  max-width:calc(100vw - 20px);
+  pointer-events:auto;
+  padding:14px 16px;
+  background:linear-gradient(#f9eed0,#e9d8ab);
+  border:2px solid #8b6a3a;
+  border-radius:12px;
+  box-shadow:0 10px 34px #000b, inset 0 1px 0 #fff9;
+  color:#3b2a14;
+  font:14px/1.45 Georgia,serif;
+  animation:tutoPop .2s ease-out;
+}
+@keyframes tutoPop{
+  from{ transform:scale(.94); opacity:0; }
+  to{ transform:scale(1); opacity:1; }
+}
+#tutorial-step{
+  display:block;
+  margin-bottom:6px;
+  font-size:10.5px;
+  font-weight:bold;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#8a6508;
+}
+#tutorial-text{
+  margin:0 0 12px;
+}
+#tutorial-text b{
+  color:#8a6508;
+}
+.tuto-buttons{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+}
+.tuto-buttons button{
+  font-size:12.5px;
+  padding:5px 12px;
+}
+#tutorial-skip{
+  background:linear-gradient(#c9bda0,#a89a78);
+  border-color:#6b5a3a;
+  box-shadow:0 2px 0 #5a4a2a;
+}
