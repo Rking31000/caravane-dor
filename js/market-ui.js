@@ -56,7 +56,9 @@
   }
 
   function updateMarketIndicators() {
-    document.querySelectorAll('.panel-box table').forEach(function (table) {
+    const scope = document.getElementById('panel') || document.querySelector('.panel-box');
+    if (!scope) return;
+    scope.querySelectorAll('table').forEach(function (table) {
       const header = table.querySelector('thead tr') || table.querySelector('tr');
       if (!header) return;
       const headers = header.children;
@@ -89,7 +91,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     scheduleUpdate();
-    const panel = document.getElementById('panel');
+    const panel = document.getElementById('panel') || document.body;
     if (panel) new MutationObserver(scheduleUpdate).observe(panel, { childList: true, subtree: true });
   });
 }());
