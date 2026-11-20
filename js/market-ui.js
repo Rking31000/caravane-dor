@@ -17,9 +17,20 @@
 
   function goodReferenceForRow(row) {
     if (typeof G === 'undefined') return null;
-    const label = row.children[0] && row.children[0].textContent.toLowerCase();
+    const cell = row.children[0];
+    // Repère fiable, indépendant de la langue affichée.
+    if (cell && cell.getAttribute) {
+      const idx = cell.getAttribute('data-good');
+      if (idx !== null && idx !== undefined && G[Number(idx)]) return Number(G[Number(idx)][1]);
+    }
+    // Repli pour les anciennes sauvegardes / autres tableaux : noms FR et EN.
+    const label = cell && cell.textContent.toLowerCase();
     if (!label) return null;
-    const item = G.find(function (good) { return label.includes(good[0].toLowerCase()); });
+    const item = G.find(function (good) {
+      const fr = good[0].toLowerCase();
+      const en = (typeof I18N !== 'undefined' ? I18N.translate(good[0]) : good[0]).toLowerCase();
+      return label.includes(fr) || label.includes(en);
+    });
     return item ? Number(item[1]) : null;
   }
 
@@ -27,7 +38,8 @@
     if (!cell || cell.querySelector('.market-price-badge')) return;
     const badge = document.createElement('small');
     badge.className = 'market-price-badge';
-    badge.textContent = (arrow || '') + ' ' + text;
+    // La flèche est dessinée par le CSS (::before) : on ne la met pas aussi dans le texte.
+    badge.textContent = text || '';
     cell.appendChild(badge);
   }
 
