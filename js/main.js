@@ -133,11 +133,11 @@ function ui(){
 function toggleLog() { const logBox = document.getElementById('log-container'); logBox.classList.toggle('closed'); document.getElementById('log-icon').textContent = logBox.classList.contains('closed') ? '▲' : '▼'; setTimeout(() => { TR = null; draw(); }, 320); }
 function closePanel(){ const p = $('overlay-panel'); if(p) p.classList.add('hidden'); }
 function openPanel(){ const p = $('overlay-panel'); if(p) p.classList.remove('hidden'); ui(); }
-function confirmNewGame(){ if(S && !S.over && !confirm('Abandonner la partie en cours et recommencer ?')) return; newGame(); }
+function confirmNewGame(){ if(S && !S.over && !confirm(typeof I18N!=='undefined'?I18N.translate('Abandonner la partie en cours et recommencer ?'):'Abandonner la partie en cours et recommencer ?')) return; newGame(); }
 function toMenu(){ speed=0;  bgMusic.pause(); $('end').style.display='none'; $('dead').style.display='none'; $('menu').style.display='flex'; menu(); }
 function restartAfterDeath(){ $('dead').style.display='none'; newGame(); }
 function deadToMenu(){ $('dead').style.display='none'; toMenu(); }
-function giveUp(){ if(!S || S.over) return; if(!confirm('Abandonner la partie en cours ?')) return; S.over = true; try{ localStorage.removeItem('cd_save'); }catch(e){} $('endb').innerHTML = '<h2>🏳️ Partie abandonnée</h2><p>Or amassé : <b>' + Math.round(S.gold) + '</b><br>Jours : <b>' + S.day + '</b></p><p><button onclick="newGame()">🔄 Nouvelle caravane</button> <button onclick="toMenu()">☰ Menu</button></p>'; $('end').style.display='flex'; }
+function giveUp(){ if(!S || S.over) return; if(!confirm(typeof I18N!=='undefined'?I18N.translate('Abandonner la partie en cours ?'):'Abandonner la partie en cours ?')) return; S.over = true; try{ localStorage.removeItem('cd_save'); }catch(e){} $('endb').innerHTML = '<h2>🏳️ Partie abandonnée</h2><p>Or amassé : <b>' + Math.round(S.gold) + '</b><br>Jours : <b>' + S.day + '</b></p><p><button onclick="newGame()">🔄 Nouvelle caravane</button> <button onclick="toMenu()">☰ Menu</button></p>'; $('end').style.display='flex'; }
 
 // Variables pour le menu
 const DL=[['Facile',.5,'Routes calmes, bandits rares et cléments'],['Normal',1,'Danger équilibré'],['Difficile',1.6,'Routes très dangereuses, bandits cruels']], DY=[50,100,150,200];
@@ -275,7 +275,7 @@ function loop(t){
 (function init(){
   try{
     const raw = localStorage.getItem('cd_save');
-    if(raw && confirm('💾 Une sauvegarde existe. La charger ?')){
+    if(raw && confirm(typeof I18N!=='undefined'?I18N.translate('💾 Une sauvegarde existe. La charger ?'):'💾 Une sauvegarde existe. La charger ?')){
       const d = fixSave(JSON.parse(raw)); S = Object.assign({travel:null, path:[], over:false}, d.S);
       TOTAL = d.TOTAL||100; DIFF = d.DIFF||1; meta = d.meta||meta; computeFog(); $('menu').style.display = 'none';
     }

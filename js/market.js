@@ -69,7 +69,7 @@ function acceptContract(idx){
 }
 function abandonContract(idx){
   const c = S.contracts[idx]; if(c.state !== 'active') return;
-  if(!confirm('Abandonner ?\nPénalité : -'+c.pen+' or et -'+c.repPen+' réputation.')) return;
+  if(!confirm(typeof I18N!=='undefined'?I18N.translate('Abandonner ?\nPénalité : -'+c.pen+' or et -'+c.repPen+' réputation.'):('Abandonner ?\nPénalité : -'+c.pen+' or et -'+c.repPen+' réputation.'))) return;
   S.gold = Math.max(0, S.gold - c.pen); S.C[c.city].rep = Math.max(-100, (S.C[c.city].rep||0) - c.repPen);
   log('📜 Contrat abandonné.','r'); pop('-'+c.pen,'r'); c.state = 'empty'; c.regenDay = S.day + ri(3, 6); ui();
 }

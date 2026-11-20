@@ -729,7 +729,8 @@ function draw(){
   // 8. UI FIXE (Cadre, boussole, titre)
   cx.textAlign='center'; cx.strokeStyle='#5a3a10'; cx.lineWidth=3; cx.strokeRect(2,2,W-4,H-4);
   cx.save(); cx.translate(W-40,H-40); cx.strokeStyle='#5a3a10'; cx.fillStyle='#5a3a10'; cx.lineWidth=1.4; cx.beginPath(); cx.arc(0,0,18,0,7); cx.stroke(); cx.restore();
-  cx.font='italic bold 15px Georgia'; cx.lineWidth=3; cx.strokeStyle='#f4e8c8cc'; cx.strokeText('Carte des Routes Marchandes', W/2, 31); cx.fillStyle='#5a3a10'; cx.fillText('Carte des Routes Marchandes', W/2, 31);
+  const mapTitle = (typeof I18N!=='undefined') ? I18N.translate('Carte des Routes Marchandes') : 'Carte des Routes Marchandes';
+  cx.font='italic bold 15px Georgia'; cx.lineWidth=3; cx.strokeStyle='#f4e8c8cc'; cx.strokeText(mapTitle, W/2, 31); cx.fillStyle='#5a3a10'; cx.fillText(mapTitle, W/2, 31);
 
   if(mv && performance.now()>nb){ nb = performance.now() + (S.slow>0?630:393); hoof(hk^=1); }
 }

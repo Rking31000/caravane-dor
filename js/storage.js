@@ -25,7 +25,7 @@ function loadGame(){
   try{
     const raw = localStorage.getItem('cd_save');
     if(!raw){ log('Aucune sauvegarde trouvée.','r'); return; }
-    if(S && !S.over && !confirm('Charger la sauvegarde ? La partie en cours sera perdue.')) return;
+    if(S && !S.over && !confirm(typeof I18N!=='undefined'?I18N.translate('Charger la sauvegarde ? La partie en cours sera perdue.'):'Charger la sauvegarde ? La partie en cours sera perdue.')) return;
     const d = fixSave(JSON.parse(raw));
     S = Object.assign({travel:null, path:[], over:false}, d.S);
     TOTAL = d.TOTAL||100; DIFF = d.DIFF||1; meta = d.meta||meta;
