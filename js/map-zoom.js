@@ -60,6 +60,44 @@
       render();
     });
 
+    // --- GESTE TACTILE : pincer / écarter deux doigts pour dézoomer / zoomer ---
+    // Écarter les doigts = distance qui augmente = zoom avant.
+    // Rapprocher les doigts = distance qui diminue = zoom arrière.
+    let pinchDist = 0;
+    let pinchZoom = zoom;
+    canvas.style.touchAction = 'none'; // empêche le zoom natif de la page sur le canvas
+
+    function touchDistance(e) {
+      if (e.touches.length < 2) return 0;
+      const a = e.touches[0], b = e.touches[1];
+      return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    }
+
+    canvas.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 2) {
+        pinchDist = touchDistance(e);
+        pinchZoom = zoom;
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 2 && pinchDist > 0) {
+        const d = touchDistance(e);
+        if (d > 0) {
+          zoom = +(pinchZoom * (d / pinchDist)).toFixed(3);
+          render();
+        }
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    function endPinch(e) {
+      if (e.touches.length < 2) pinchDist = 0;
+    }
+    canvas.addEventListener('touchend', endPinch);
+    canvas.addEventListener('touchcancel', endPinch);
+
     render();
   }
 
