@@ -101,8 +101,13 @@ function ui(){
       if(S.travel || S.over || (c.ev && c.ev.t=='epi')) html += '<p class="r">Marché fermé.</p>';
       else html += htmlSupplies(c);
       const visibleIdx = []; for(let i=0;i<9;i++) visibleIdx.push(i); for(let i=9;i<G.length;i++){ if(S.inv[i] > 0 || c.s[i] > 0) visibleIdx.push(i); }
-      html += '<table><tr><th>Bien</th><th>Stock</th><th>Achat</th><th>Vente</th><th>Sac</th><th></th></tr>';
-      visibleIdx.forEach(i => { const g = G[i], r = i < 9 ? price(c,i)/g[1] : 1; html += '<tr><td data-good="'+i+'">'+g[2]+' '+g[0]+'</td><td>'+Math.floor(c.s[i]||0)+'</td><td class="'+(r<.9?'g':r>1.3?'r':'')+'">'+buyP(c,i)+'</td><td>'+sellP(c,i)+'</td><td>'+S.inv[i]+'</td><td style="white-space:nowrap"><button onclick="buy('+i+',1)">+1</button> <button onclick="buy('+i+',10)">+10</button> <button onclick="sell('+i+',1)">−1</button> <button onclick="sell('+i+',999)">Tout</button></td></tr>'; });
+      html += '<table><tr><th>Bien</th><th>Stock</th><th>Achat</th><th>Vente</th><th>Sac</th><th>Pachat</th><th></th></tr>';
+      visibleIdx.forEach(i => {
+        const g = G[i], r = i < 9 ? price(c,i)/g[1] : 1;
+        const last = (S.lastBuy && S.lastBuy[i]) || 0;
+        const pachat = S.inv[i] > 0 ? (last > 0 ? last : '–') : '–';
+        html += '<tr><td data-good="'+i+'">'+g[2]+' '+g[0]+'</td><td>'+Math.floor(c.s[i]||0)+'</td><td class="'+(r<.9?'g':r>1.3?'r':'')+'">'+buyP(c,i)+'</td><td>'+sellP(c,i)+'</td><td>'+S.inv[i]+'</td><td class="pachat">'+pachat+'</td><td style="white-space:nowrap"><button onclick="buy('+i+',1)">+1</button> <button onclick="buy('+i+',10)">+10</button> <button onclick="sell('+i+',1)">−1</button> <button onclick="sell('+i+',999)">Tout</button></td></tr>';
+      });
       html += '</table>';
       if(c.q) html += '<p>📜 Quête : '+c.q.n+'× '+G[c.q.g][0]+' → '+c.q.rew+' or (jusqu\'au jour '+c.q.exp+') <button '+(S.inv[c.q.g]>=c.q.n?'':'disabled')+' onclick="deliver()">Livrer</button></p>';
     }
