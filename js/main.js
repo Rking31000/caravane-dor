@@ -160,6 +160,7 @@ function startGame(){
   $('menu').style.display='none'; 
   speed=1; 
   newGame(); 
+  if(typeof window.startTutorial === 'function') window.startTutorial();
 }
 
 document.addEventListener('keydown', e => {
