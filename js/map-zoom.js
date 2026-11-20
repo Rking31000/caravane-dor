@@ -22,6 +22,25 @@
       '<button type="button" id="map-zoom-out" aria-label="Dézoomer la carte">−</button>';
     canvasBox.appendChild(controls);
 
+    // Les contrôles de zoom se placent juste au-dessus de la ligne d'info et des
+    // boutons de voyage, sinon ils les recouvrent (surtout sur téléphone en portrait).
+    function placeControls() {
+      const info = document.getElementById('info');
+      if (!info) return;
+      const offset = Math.round(canvasBox.getBoundingClientRect().bottom - info.getBoundingClientRect().top) + 12;
+      controls.style.bottom = Math.max(12, offset) + 'px';
+    }
+    placeControls();
+    window.addEventListener('resize', placeControls);
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(placeControls);
+      ro.observe(canvasBox);
+      const info = document.getElementById('info');
+      const quick = document.getElementById('quick');
+      if (info) ro.observe(info);
+      if (quick) ro.observe(quick);
+    }
+
     function render() {
       zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
       if (cameraRef) cameraRef.zoom = zoom;
