@@ -365,6 +365,7 @@ function getRoadAtMouse(mx, my) {
 
 // --- POUSSIÈRE SOUS LES SABOTS ---
 const DUST = [];
+let lastDustT = 0;
 function spawnDust(x, y, dir) {
   if (DUST.length > 90) return;
   DUST.push({
@@ -612,12 +613,15 @@ function draw(){
   cx.save(); cx.translate(pos[0],pos[1]); cx.scale(scaleBase*1.15, scaleBase*1.15); cx.translate(-pos[0],-pos[1]);
   const mv = !!(S.travel && speed), nf = Math.min(8, 1+S.up.cap), GP = [[60,3],[-34*nf-66,3],[-26*nf,-22],[-26*nf-14,21],[29,-25]], ng = Math.min(S.up.grd,5);
 
-  // Traces de pas et poussière
+  // Poussière & traces de pas
+  const nowDust = performance.now();
+  const dustDt = lastDustT ? Math.min((nowDust - lastDustT)/1000, .05) : .016;
+  lastDustT = nowDust;
   if (mv) {
     if (S.travel) drawTracks(P(S.C[S.travel.from]), P(S.C[S.travel.to]), S.travel.pos/S.travel.e.d);
     if (Math.random() < .45) spawnDust(pos[0], pos[1] + 8, dir);
   }
-  updateDust(dt);
+  updateDust(dustDt);
   drawDust();
 
   const tot = Math.ceil(Math.min(1, load()/cap())*nf*3-.001), E = [{y:pos[1]+8+bob, f:()=>camel(pos[0], pos[1]+8+bob, dir, mv, .75, 0, 0)}];
