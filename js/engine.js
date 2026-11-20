@@ -574,7 +574,15 @@ document.addEventListener('click', () => {
 window.addEventListener('error', e => { console.error('Non géré:', e.message); if(S && !S.over){ log('⚠️ Erreur : '+e.message,'r'); } });
 document.addEventListener('click', e => {
   const p = $('overlay-panel');
-  if(p && !p.classList.contains('hidden') && !p.contains(e.target)) closePanel();
+  if(!p || p.classList.contains('hidden')) return;
+  // Le panneau se reconstruit à chaque achat : le bouton cliqué est alors
+  // détaché du DOM. composedPath() garde la trace du clic d'origine.
+  const path = (typeof e.composedPath === 'function') ? e.composedPath() : [];
+  if(path.indexOf(p) !== -1) return;
+  if(p.contains(e.target)) return;
+  // Cible retirée du DOM par un re-rendu : on ne ferme pas le panneau.
+  if(e.target && e.target.isConnected === false) return;
+  closePanel();
 });
 function ensureAudio(){ if(!AC) try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} if(AC && AC.state=='suspended') AC.resume(); if(AC && !MG){ MG = AC.createGain(); MG.gain.value=.5; MG.connect(AC.destination); mt=AC.currentTime+.1; } }
 function ding(f,v){ if(!SND||!AC) return; const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime; o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.0001,t+.9); o.connect(g); g.connect(AC.destination); o.start(); o.stop(t+.9); }
