@@ -275,7 +275,7 @@ function guard(x,y,dir,mv,i){
 function camel(x,y,dir,mv,s,sk,o){
   const t = performance.now()/1000+(o||0)*.7; const ph = mv ? t*(S.slow>0?5:8) : 0;
   const br = Math.sin(t*2)*.6; const hb = mv ? Math.sin(ph*2)*1.5 : Math.sin(t*1.3)*1; const C = '#c8964f';
-  cx.save(); cx.translate(x,y); cx.scale(s*dir,s); cx.beginPath(); cx.ellipse(0,1,20,4,0,0,7); cx.fillStyle='#0004'; cx.fill(); //cx.lineCap='round'; cx.strokeStyle='#8a5a22'; cx.lineWidth=1.3; cx.beginPath(); cx.moveTo(-14,-13); cx.lineTo(-29,-5); cx.stroke();
+  cx.save(); cx.translate(x,y); cx.scale(s*dir,s); cx.beginPath(); cx.ellipse(0,4,23,6.5,0,0,7); cx.fillStyle='rgba(90,60,20,.15)'; cx.fill(); cx.beginPath(); cx.ellipse(0,1,15,4,0,0,7); cx.fillStyle='rgba(50,32,12,.24)'; cx.fill(); //cx.lineCap='round'; cx.strokeStyle='#8a5a22'; cx.lineWidth=1.3; cx.beginPath(); cx.moveTo(-14,-13); cx.lineTo(-29,-5); cx.stroke();
   const leg = (hx,o,c) => { const a = mv ? Math.sin(ph+o)*.55 : 0; const fx = hx+Math.sin(a)*11; const fy = -11+Math.cos(a)*11-(mv?Math.max(0,Math.cos(ph+o))*3:0); cx.strokeStyle=c; cx.lineWidth=3.4; cx.beginPath(); cx.moveTo(hx,-11); cx.lineTo(fx,fy); cx.stroke(); cx.fillStyle='#4a3010'; cx.beginPath(); cx.arc(fx,fy,1.8,0,7); cx.fill(); };
   leg(-5,Math.PI,'#9a6a2a'); leg(11,Math.PI,'#9a6a2a');
   cx.fillStyle=C; cx.beginPath(); cx.ellipse(0,-17,16,7.5+br*.3,0,0,7); cx.fill(); cx.beginPath(); cx.ellipse(-3,-24,5.5,5+br*.3,0,0,7); cx.fill();
@@ -363,6 +363,68 @@ function getRoadAtMouse(mx, my) {
   return null;
 }
 
+// --- POUSSIÈRE SOUS LES SABOTS ---
+const DUST = [];
+function spawnDust(x, y, dir) {
+  if (DUST.length > 90) return;
+  DUST.push({
+    x: x + (Math.random() - .5) * 12,
+    y: y + (Math.random() - .5) * 5,
+    vx: -dir * (0.15 + Math.random() * .55),
+    vy: -0.12 - Math.random() * .38,
+    life: 1,
+    decay: .008 + Math.random() * .014,
+    size: 1 + Math.random() * 2
+  });
+}
+function updateDust(dt) {
+  const f = Math.min(dt, .05) * 60;
+  for (let i = DUST.length - 1; i >= 0; i--) {
+    const p = DUST[i];
+    p.x += p.vx * f; p.y += p.vy * f;
+    p.vy -= .002 * f;
+    p.life -= p.decay * f;
+    if (p.life <= 0) DUST.splice(i, 1);
+  }
+}
+function drawDust() {
+  for (let i = 0; i < DUST.length; i++) {
+    const p = DUST[i];
+    cx.globalAlpha = Math.max(0, p.life) * .38;
+    cx.fillStyle = '#c9a96a';
+    cx.beginPath(); cx.arc(p.x, p.y, p.size * (1.6 - p.life * .4), 0, 7); cx.fill();
+  }
+  cx.globalAlpha = 1;
+}
+
+// --- VIGNETTAGE (bords de carte assombris) ---
+let VIG = null;
+function vignette(W, H) {
+  if (VIG && VIG.w === W && VIG.h === H) return VIG.g;
+  const g = cx.createRadialGradient(W/2, H/2, Math.min(W,H)*.38, W/2, H/2, Math.max(W,H)*.78);
+  g.addColorStop(0, 'rgba(40,20,5,0)');
+  g.addColorStop(.75, 'rgba(40,20,5,.12)');
+  g.addColorStop(1, 'rgba(30,14,3,.34)');
+  VIG = { w: W, h: H, g: g };
+  return g;
+}
+
+function drawTracks(A, B, f){
+  const n = 12;
+  for(let k = 1; k <= n; k++){
+    const tt = f - k * .014;
+    if(tt <= 0) break;
+    const px = A[0] + (B[0]-A[0]) * tt;
+    const py = A[1] + (B[1]-A[1]) * tt;
+    cx.globalAlpha = (1 - k/(n+1)) * .32;
+    cx.fillStyle = '#8a6a3a';
+    cx.beginPath();
+    cx.ellipse(px, py + 5*camera.zoom, 2.2*camera.zoom, 1.1*camera.zoom, 0, 0, 7);
+    cx.fill();
+  }
+  cx.globalAlpha = 1;
+}
+
 function draw(){
   if(!S) return;
   const W = Math.max(1, cv.clientWidth||400), H = Math.max(1, cv.clientHeight||Math.round(W*.66)), dpr = devicePixelRatio||1;
@@ -392,6 +454,10 @@ function draw(){
   camera.y = Math.max(0, Math.min(camera.y, ZH - H));
 
   cx.drawImage(terr(ZW, ZH), -camera.x, -camera.y, ZW, ZH);
+
+  // 2.5. VIGNETTAGE (bords de carte assombris — effet parchemin)
+  cx.fillStyle = vignette(W, H);
+  cx.fillRect(0, 0, W, H);
 
   // 3. AMBIANCE JOUR/NUIT
   const amb = getAmbient(S.t);
@@ -476,7 +542,31 @@ function draw(){
     cx.beginPath(); cx.arc(x,y,r,0,7); cx.fillStyle = explored ? '#f4e8c8' : '#dcd0b0'; cx.fill();
     cx.lineWidth = 2.5 * camera.zoom; cx.strokeStyle = bc; cx.stroke();
 
+    // Ombre portée sous le cercle de la ville
+    cx.beginPath(); cx.arc(x+2*camera.zoom, y+3*camera.zoom, r, 0, 7);
+    cx.fillStyle = 'rgba(60,40,15,.18)'; cx.fill();
+
+    // Halo pulsant sur la ville actuelle (où se trouve la caravane)
+    if (S && !S.travel && c === S.C[S.cur]) {
+      const t = performance.now()/1000;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 3.2);
+      cx.beginPath(); cx.arc(x, y, r + 4*camera.zoom + pulse*4*camera.zoom, 0, 7);
+      cx.strokeStyle = 'rgba(241,196,83,'+(0.55 + pulse*0.3)+')';
+      cx.lineWidth = 2.5 * camera.zoom;
+      cx.stroke();
+      cx.beginPath(); cx.arc(x, y, r + 8*camera.zoom + pulse*6*camera.zoom, 0, 7);
+      cx.strokeStyle = 'rgba(241,196,83,'+(0.25 + pulse*0.15)+')';
+      cx.lineWidth = 1.5 * camera.zoom;
+      cx.stroke();
+    }
+
     if(explored){
+      // Effet de relief (dégradé radial)
+      const gr = cx.createRadialGradient(x-r*.3, y-r*.3, r*.1, x, y, r);
+      gr.addColorStop(0, '#fff4d6'); gr.addColorStop(1, '#f4e8c8');
+      cx.beginPath(); cx.arc(x,y,r,0,7); cx.fillStyle = gr; cx.fill();
+      cx.lineWidth = 2.2 * camera.zoom; cx.strokeStyle = bc; cx.stroke();
+
       bld(c.sz, x, y, r);
       const rep = c.rep||0;
       if(rep !== 0){
@@ -521,6 +611,15 @@ function draw(){
   const scaleBase = Math.min(ZW/1000, ZH/640);
   cx.save(); cx.translate(pos[0],pos[1]); cx.scale(scaleBase*1.15, scaleBase*1.15); cx.translate(-pos[0],-pos[1]);
   const mv = !!(S.travel && speed), nf = Math.min(8, 1+S.up.cap), GP = [[60,3],[-34*nf-66,3],[-26*nf,-22],[-26*nf-14,21],[29,-25]], ng = Math.min(S.up.grd,5);
+
+  // Traces de pas et poussière
+  if (mv) {
+    if (S.travel) drawTracks(P(S.C[S.travel.from]), P(S.C[S.travel.to]), S.travel.pos/S.travel.e.d);
+    if (Math.random() < .45) spawnDust(pos[0], pos[1] + 8, dir);
+  }
+  updateDust(dt);
+  drawDust();
+
   const tot = Math.ceil(Math.min(1, load()/cap())*nf*3-.001), E = [{y:pos[1]+8+bob, f:()=>camel(pos[0], pos[1]+8+bob, dir, mv, .75, 0, 0)}];
   for(let j=0;j<nf;j++){ const d = 38+32*j, fx = pos[0]-CV[0]*d, fy = pos[1]+8-CV[1]*d*.6; E.push({y:fy, f:()=>camel(fx, fy, dir, mv, .5, Math.max(0,Math.min(3,tot-3*j)), j+1)}); }
   E.sort((p,q)=>p.y-q.y).forEach(e => e.f());
