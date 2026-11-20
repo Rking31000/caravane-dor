@@ -317,3 +317,13 @@ window.addEventListener('orientationchange', () => {
     if(typeof draw === 'function') draw(); // Redessine la carte
   }, 400); // On attend 0.4s que le téléphone ait fini de tourner
 });
+
+// La carte s'adapte à toute variation de taille (rotation, barres du navigateur mobile,
+// redimensionnement de la fenêtre) : on vide les caches et on redessine.
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  TX = null;
+  TR = null;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { if(typeof draw === 'function') draw(); }, 120);
+});
