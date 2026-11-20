@@ -1,4 +1,4 @@
-/* Amélioration visuelle indépendante des mécaniques du marché. */
+/* AmÃ©lioration visuelle indÃ©pendante des mÃ©caniques du marchÃ©. */
 (function () {
   'use strict';
 
@@ -37,7 +37,7 @@
 
     if (reference === null) {
       cell.classList.add('market-price-neutral');
-      addBadge(cell, mode === 'buy' ? 'Prix d’achat' : 'Prix de vente');
+      addBadge(cell, mode === 'buy' ? 'Prix dâ€™achat' : 'Prix de vente');
       return;
     }
 
@@ -49,7 +49,7 @@
       : unfavorable
         ? (mode === 'buy' ? 'Achat cher' : 'Vente faible')
         : 'Prix moyen';
-    const arrow = favorable ? '▲' : unfavorable ? '▼' : '';
+    const arrow = favorable ? 'â–²' : unfavorable ? 'â–¼' : '';
 
     cell.classList.add(favorable ? 'market-price-good' : unfavorable ? 'market-price-bad' : 'market-price-neutral');
     addBadge(cell, label, arrow);
