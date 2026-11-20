@@ -1,0 +1,189 @@
+/* =========================================================
+   PACK 2 — INTERFACE PARCHEMIN
+   Cadres dorés, typographie ancienne, icônes dessinées et
+   barres de provisions. Purement esthétique : aucune mécanique
+   de jeu n'est modifiée.
+   ========================================================= */
+
+/* ---------- 1. COINS DORÉS ORNEMENTÉS ---------- */
+header,
+.canvas-box,
+.log-box,
+.overlay-panel > .wrap,
+#menu .box,
+#end .box,
+#dead .box {
+  position: relative;
+}
+
+header::before, header::after,
+.canvas-box::before, .canvas-box::after,
+.log-box::before, .log-box::after,
+.overlay-panel > .wrap::before, .overlay-panel > .wrap::after,
+#menu .box::before, #menu .box::after,
+#end .box::before, #end .box::after,
+#dead .box::before, #dead .box::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: .85;
+}
+
+/* Coin haut-gauche */
+header::before,
+.canvas-box::before,
+.log-box::before,
+.overlay-panel > .wrap::before,
+#menu .box::before,
+#end .box::before,
+#dead .box::before {
+  top: 3px;
+  left: 3px;
+  border-top: 2px solid #d2a64c;
+  border-left: 2px solid #d2a64c;
+  border-top-left-radius: 8px;
+}
+
+/* Coin bas-droit */
+header::after,
+.canvas-box::after,
+.log-box::after,
+.overlay-panel > .wrap::after,
+#menu .box::after,
+#end .box::after,
+#dead .box::after {
+  right: 3px;
+  bottom: 3px;
+  border-right: 2px solid #d2a64c;
+  border-bottom: 2px solid #d2a64c;
+  border-bottom-right-radius: 8px;
+}
+
+/* Deux petits clous dorés dans les coins opposés */
+header {
+  background-image:
+    radial-gradient(circle at calc(100% - 12px) 12px, #d2a64c 0 2px, transparent 2.5px),
+    radial-gradient(circle at 12px calc(100% - 12px), #d2a64c 0 2px, transparent 2.5px),
+    linear-gradient(#3a2610, #241608);
+}
+.canvas-box,
+.log-box,
+.overlay-panel > .wrap,
+#menu .box,
+#end .box {
+  background-image:
+    radial-gradient(circle at calc(100% - 12px) 12px, #d2a64c 0 2px, transparent 2.5px),
+    radial-gradient(circle at 12px calc(100% - 12px), #d2a64c 0 2px, transparent 2.5px);
+}
+
+/* ---------- 2. TYPOGRAPHIE ANCIENNE ---------- */
+h1,
+#menu h1,
+#dead h1,
+#end .box h2,
+.contracts-title,
+.recipe-title,
+#tip h4,
+.log-header,
+.overlay-gold {
+  font-family: 'Cinzel', Georgia, serif;
+}
+
+.lore,
+.reason,
+#menu .box p i,
+.contract-line2,
+.recipe-formula,
+.contract-progress {
+  font-family: 'IM Fell English', Georgia, serif;
+}
+
+.contracts-title,
+.recipe-title {
+  letter-spacing: 1.2px;
+}
+
+/* ---------- 3. PICTOGRAMMES DESSINÉS ---------- */
+.ico {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.stat-box .ico,
+.overlay-gold .ico {
+  width: 18px;
+  height: 18px;
+}
+
+.supply-row .icon .ico {
+  width: 22px;
+  height: 22px;
+}
+
+.ico-coin {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23d4a017' stroke='%238a6508' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%23f7e08a' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%23f7e08a'/%3E%3C/svg%3E");
+}
+.ico-water {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C12 2 4 11 4 15a8 8 0 0 0 16 0C20 11 12 2 12 2z' fill='%234a90d9' stroke='%231a4a7a' stroke-width='1.5'/%3E%3Cpath d='M8 15a4 4 0 0 0 4 4' fill='none' stroke='%23bfe4ff' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+.ico-meat {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 3a5 5 0 0 0-6 7L4 14l6 6 4-4a5 5 0 0 0 7-6l-4 4-3-3 4-4z' fill='%23b5651d' stroke='%236b3a0a' stroke-width='1'/%3E%3C/svg%3E");
+}
+.ico-compass {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23e8dcc0' stroke='%237a5420' stroke-width='2'/%3E%3Cpath d='M12 3l3 9-3 9-3-9z' fill='%23a83a3a'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%237a5420'/%3E%3C/svg%3E");
+}
+.ico-star {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3 6.5 7 1-5 5 1.2 7L12 18l-6.2 3.5L7 14.5 2 9.5l7-1z' fill='%23f1c453' stroke='%238a6508' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* ---------- 4. BARRES DE PROVISIONS ---------- */
+.supply-row {
+  flex-wrap: wrap;
+}
+
+.supply-bar {
+  flex: 1 1 100%;
+  height: 7px;
+  margin-top: 5px;
+  border: 1px solid #8b6a3a;
+  border-radius: 5px;
+  background: #e3d3a6;
+  box-shadow: inset 0 1px 2px #0003;
+  overflow: hidden;
+}
+
+.supply-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #3a7ab5, #7ec8f0);
+  transition: width .35s ease;
+}
+
+.supply-row.nourriture .supply-bar > i {
+  background: linear-gradient(90deg, #a05a10, #e8b04b);
+}
+
+.supply-row.crit .supply-bar > i {
+  background: linear-gradient(90deg, #8b1e1e, #e05050);
+  animation: blink 1s infinite;
+}
+
+/* ---------- 5. PETITES FINITIONS ---------- */
+.overlay-header {
+  background-image: radial-gradient(circle at 50% 0, #fff8, transparent 70%);
+}
+
+.contract-card,
+.recipe {
+  box-shadow: inset 0 1px 0 #fff8, 0 1px 3px #0002;
+}
