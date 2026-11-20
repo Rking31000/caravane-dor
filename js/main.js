@@ -134,7 +134,16 @@ function toggleLog() { const logBox = document.getElementById('log-container'); 
 function closePanel(){ const p = $('overlay-panel'); if(p) p.classList.add('hidden'); }
 function openPanel(){ const p = $('overlay-panel'); if(p) p.classList.remove('hidden'); ui(); }
 function confirmNewGame(){ if(S && !S.over && !confirm(typeof I18N!=='undefined'?I18N.translate('Abandonner la partie en cours et recommencer ?'):'Abandonner la partie en cours et recommencer ?')) return; newGame(); }
-function toMenu(){ speed=0;  bgMusic.pause(); $('end').style.display='none'; $('dead').style.display='none'; $('menu').style.display='flex'; menu(); }
+function toMenu(){
+  if(S && !S.over) autoSave();      // garde la partie pour pouvoir la reprendre
+  closePanel();                      // ferme le panneau du marché s'il est ouvert
+  speed=0;
+  bgMusic.pause();
+  $('end').style.display='none';
+  $('dead').style.display='none';
+  $('menu').style.display='flex';
+  menu();
+}
 function restartAfterDeath(){ $('dead').style.display='none'; newGame(); }
 function deadToMenu(){ $('dead').style.display='none'; toMenu(); }
 function giveUp(){ if(!S || S.over) return; if(!confirm(typeof I18N!=='undefined'?I18N.translate('Abandonner la partie en cours ?'):'Abandonner la partie en cours ?')) return; S.over = true; try{ localStorage.removeItem('cd_save'); }catch(e){} $('endb').innerHTML = '<h2>🏳️ Partie abandonnée</h2><p>Or amassé : <b>' + Math.round(S.gold) + '</b><br>Jours : <b>' + S.day + '</b></p><p><button onclick="newGame()">🔄 Nouvelle caravane</button> <button onclick="toMenu()">☰ Menu</button></p>'; $('end').style.display='flex'; }
