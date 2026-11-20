@@ -128,9 +128,9 @@ function rollTravelEvent(T){
     const gd = S.up.grd;
     const pRepel = gd / (gd + dg*1.2 + 0.5);
     if(R() < pRepel){
-      S.stats.repelled = (S.stats.repelled||0) + 1; swordClash(0.10); log('🛡️ Une bande de brigands est repoussée par vos gardes !','g');
+      S.stats.repelled = (S.stats.repelled||0) + 1; swordClash(0.10); flashScreen(90, 170, 110, 300); log('🛡️ Une bande de brigands est repoussée par vos gardes !','g');
     } else {
-      S.stats.ambushes = (S.stats.ambushes||0) + 1; swordClash(0.18);
+      S.stats.ambushes = (S.stats.ambushes||0) + 1; swordClash(0.18); flashScreen(200, 35, 35, 450); shakeScreen();
       const lossGold = Math.round(S.gold * (0.10 + R()*0.15) * Math.min(1.4, DIFF)); S.gold = Math.max(0, S.gold - lossGold);
       let lossGoods = 0, lossName = ''; const owned = [];
       for(let g=0;g<N_GOODS;g++) if(S.inv[g] > 0) owned.push(g);
@@ -139,10 +139,10 @@ function rollTravelEvent(T){
     }
   } else {
     const y = R();
-    if(y < 0.06){ S.stats.shortcuts = (S.stats.shortcuts||0) + 1; T.pos = Math.min(T.e.d - 1, T.pos + T.e.d * 0.15); log('🧭 Vous découvrez un raccourci ! (+15 % du trajet)','g'); }
+    if(y < 0.06){ S.stats.shortcuts = (S.stats.shortcuts||0) + 1; T.pos = Math.min(T.e.d - 1, T.pos + T.e.d * 0.15); flashScreen(255, 220, 120, 220); log('🧭 Vous découvrez un raccourci ! (+15 % du trajet)','g'); }
     else if(y < 0.13){ const g = ri(0,7); const n = Math.min(6, cap() - load()); const p = Math.round(G[g][1] * 0.55); if(n > 0 && S.gold >= p*n){ S.gold -= p*n; S.inv[g] += n; S.stats.bought[g] += n; S.stats.spentOn[g] += p*n; log('🧳 Marchand ambulant : '+n+'× '+G[g][2]+' '+G[g][0]+' à '+(p*n)+' or.','g'); } else log('🧳 Vous croisez un marchand ambulant.'); }
-    else if(y < 0.22){ if(S.slow <= 0){ S.slow = 3; log('⛈️ Intempéries : vitesse -50 % pendant 3 jours','r'); } }
-    else if(y < 0.28){ const o = ri(40, 180 + S.day*2); S.gold += o; log('💎 Cache abandonnée : +'+o+' or !','g'); pop('+'+o,'g'); }
+    else if(y < 0.22){ if(S.slow <= 0){ S.slow = 3; flashScreen(150, 130, 90, 320); log('⛈️ Intempéries : vitesse -50 % pendant 3 jours','r'); } }
+    else if(y < 0.28){ const o = ri(40, 180 + S.day*2); S.gold += o; flashScreen(255, 200, 80, 260); log('💎 Cache abandonnée : +'+o+' or !','g'); pop('+'+o,'g'); }
   }
 }
 
@@ -363,9 +363,64 @@ function getRoadAtMouse(mx, my) {
   return null;
 }
 
+// --- EFFETS D'ÉVÉNEMENTS (éclairs, étoiles, tempête de sable) ---
+const FX = { flash: null };
+let lastFrameT = 0;
+function flashScreen(r, g, b, dur){ FX.flash = { r:r, g:g, b:b, dur:dur, t:performance.now() }; }
+function shakeScreen(){ document.body.classList.add('shake'); setTimeout(()=>document.body.classList.remove('shake'), 650); }
+
+let STARS = null;
+function getStars(){
+  if(STARS) return STARS;
+  STARS = [];
+  let seed = 987654321;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  for(let i=0;i<80;i++) STARS.push({ x:rnd(), y:rnd(), s:.5+rnd()*1.3, p:rnd()*Math.PI*2 });
+  return STARS;
+}
+function drawStars(W,H,t){
+  cx.save();
+  cx.fillStyle = '#fff6d8';
+  for(let i=0;i<STARS.length;i++){
+    const s = STARS[i], tw = .5 + .5*Math.sin(t*2 + s.p);
+    cx.globalAlpha = .12 + tw*.45;
+    const x = ((s.x*W - camera.x*.015) % W + W) % W;
+    const y = ((s.y*H - camera.y*.015) % H + H) % H;
+    cx.beginPath(); cx.arc(x, y, s.s*Math.max(.6, camera.zoom*.5), 0, 7); cx.fill();
+  }
+  cx.restore();
+}
+
+let sandT = 0;
+function drawSandstorm(W,H,dt){
+  sandT += dt;
+  cx.save();
+  cx.strokeStyle = '#e8c88a';
+  cx.lineCap = 'round';
+  for(let i=0;i<52;i++){
+    const seed = i*97.31;
+    const y = ((seed*13.7) % H + H) % H;
+    const speed = 110 + (i%7)*26;
+    const x = ((seed*7.3 + sandT*speed) % (W+140)) - 70;
+    const len = 14 + (i%5)*10;
+    cx.globalAlpha = .05 + (i%4)*.022;
+    cx.lineWidth = .8 + (i%3)*.5;
+    cx.beginPath(); cx.moveTo(x,y); cx.lineTo(x+len, y-2.5); cx.stroke();
+  }
+  cx.restore();
+}
+
+function drawFlash(W,H){
+  const f = FX.flash;
+  if(!f) return;
+  const e = performance.now() - f.t;
+  if(e >= f.dur){ FX.flash = null; return; }
+  cx.fillStyle = 'rgba('+f.r+','+f.g+','+f.b+','+((1-e/f.dur)*.4).toFixed(3)+')';
+  cx.fillRect(0,0,W,H);
+}
+
 // --- POUSSIÈRE SOUS LES SABOTS ---
 const DUST = [];
-let lastDustT = 0;
 function spawnDust(x, y, dir) {
   if (DUST.length > 90) return;
   DUST.push({
@@ -432,6 +487,10 @@ function draw(){
   if(cv.width!==W*dpr || cv.height!==H*dpr){ cv.width=W*dpr; cv.height=H*dpr; }
   cx.setTransform(dpr,0,0,dpr,0,0);
   
+  const nowFrame = performance.now();
+  const frameDt = lastFrameT ? Math.min((nowFrame - lastFrameT)/1000, .05) : .016;
+  lastFrameT = nowFrame;
+
   // 1. NETTOYAGE DE L'ÉCRAN
   cx.clearRect(0, 0, W, H);
   cx.fillStyle = '#e9d9b0'; cx.fillRect(0,0,W,H);
@@ -466,6 +525,12 @@ function draw(){
     cx.fillStyle = 'rgba('+amb.c[0]+','+amb.c[1]+','+amb.c[2]+','+amb.a+')';
     cx.fillRect(0,0,W,H);
   }
+
+  // 3.5. CIEL NOCTURNE (étoiles scintillantes)
+  if(amb.a > .22){ getStars(); drawStars(W, H, nowFrame/1000); }
+
+  // 3.6. MÉTÉO : tempête de sable quand la caravane est ralentie
+  if(S.slow > 0) drawSandstorm(W, H, frameDt);
 
   const h = hops();
   const P = c => [c.x * ZW - camera.x, c.y * ZH - camera.y];
@@ -598,12 +663,10 @@ function draw(){
   });
 
   // 6. DESSIN DE LA CARAVANE
-  let pos;  
-  window.camelScreenPos = pos;
-  if(S.travel){ const T = S.travel, A = P(S.C[T.from]), B = P(S.C[T.to]), f = T.pos/T.e.d; pos = [A[0]+(B[0]-A[0])*f, A[1]+(B[1]-A[1])*f]; }  
- 
+  let pos;
+  if(S.travel){ const T = S.travel, A = P(S.C[T.from]), B = P(S.C[T.to]), f = T.pos/T.e.d; pos = [A[0]+(B[0]-A[0])*f, A[1]+(B[1]-A[1])*f]; }
   else { pos = P(S.C[S.cur]); }
-  
+  window.camelScreenPos = pos;
 
   const bob = S.travel && speed ? Math.sin(performance.now()/110)*2*camera.zoom : 0;
   const dir = S.travel ? (P(S.C[S.travel.to])[0] < P(S.C[S.travel.from])[0] ? -1 : 1) : CD; CD = dir;
@@ -614,14 +677,11 @@ function draw(){
   const mv = !!(S.travel && speed), nf = Math.min(8, 1+S.up.cap), GP = [[60,3],[-34*nf-66,3],[-26*nf,-22],[-26*nf-14,21],[29,-25]], ng = Math.min(S.up.grd,5);
 
   // Poussière & traces de pas
-  const nowDust = performance.now();
-  const dustDt = lastDustT ? Math.min((nowDust - lastDustT)/1000, .05) : .016;
-  lastDustT = nowDust;
   if (mv) {
     if (S.travel) drawTracks(P(S.C[S.travel.from]), P(S.C[S.travel.to]), S.travel.pos/S.travel.e.d);
     if (Math.random() < .45) spawnDust(pos[0], pos[1] + 8, dir);
   }
-  updateDust(dustDt);
+  updateDust(frameDt);
   drawDust();
 
   const tot = Math.ceil(Math.min(1, load()/cap())*nf*3-.001), E = [{y:pos[1]+8+bob, f:()=>camel(pos[0], pos[1]+8+bob, dir, mv, .75, 0, 0)}];
@@ -663,6 +723,9 @@ function draw(){
       }
   }
   
+  // 7.5. ÉCLAIRS D'ÉVÉNEMENTS (au-dessus de la carte, sous l'UI)
+  drawFlash(W, H);
+
   // 8. UI FIXE (Cadre, boussole, titre)
   cx.textAlign='center'; cx.strokeStyle='#5a3a10'; cx.lineWidth=3; cx.strokeRect(2,2,W-4,H-4);
   cx.save(); cx.translate(W-40,H-40); cx.strokeStyle='#5a3a10'; cx.fillStyle='#5a3a10'; cx.lineWidth=1.4; cx.beginPath(); cx.arc(0,0,18,0,7); cx.stroke(); cx.restore();
