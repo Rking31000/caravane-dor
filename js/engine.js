@@ -98,7 +98,7 @@ function newGame(){
  const inT=new Set([0]);while(inT.size<C.length){let best=null;inT.forEach(i=>C.forEach((c,j)=>{if(!inT.has(j)){const dd=dist(C[i],c);if(!best||dd<best[0])best=[dd,i,j]}}));add(best[1],best[2]);inT.add(best[2])}
  C.forEach((c,i)=>C.map((o,j)=>[dist(c,o),j]).filter(x=>x[1]!=i).sort((x,y)=>x[0]-y[0]).slice(0,2).forEach(x=>{if(R()<.6&&!has(i,x[1])&&x[0]<.4)add(i,x[1])}));
  const cur=ri(0,C.length-1);C[cur].seen=true;C[cur].rumeur=true;
- S={C,E,cur,day:0,t:0.25,gold:Math.round(150*(1+.15*meta.ren)),inv:Array(N_GOODS).fill(0), water:SUPPLY_START, food:SUPPLY_START, up:{cap:0,spd:0,grd:0,neg:0,sc:0},subs:[],travel:null,path:[],km:0,log:[],spent:0,slow:0,over:false,
+ S={C,E,cur,day:0,t:0.25,gold:Math.round(150*(1+.15*meta.ren)),inv:Array(N_GOODS).fill(0), lastBuy:Array(N_GOODS).fill(0), water:SUPPLY_START, food:SUPPLY_START, up:{cap:0,spd:0,grd:0,neg:0,sc:0},subs:[],travel:null,path:[],km:0,log:[],spent:0,slow:0,over:false,
     stats:{bought:Array(N_GOODS).fill(0),sold:Array(N_GOODS).fill(0),spentOn:Array(N_GOODS).fill(0),earnedOn:Array(N_GOODS).fill(0),bestTrade:0,bestTradeInfo:null,totalProfit:0,deals:0,contractsDone:0,contractsFailed:0,crafted:0,ambushes:0,repelled:0,shortcuts:0,waterBought:0, foodBought:0, deaths:0}};
  S.contracts = [genContract(), genContract(), genContract()];
  computeFog(); sel=null; $('end').style.display='none'; $('dead').style.display='none';
@@ -140,7 +140,7 @@ function rollTravelEvent(T){
   } else {
     const y = R();
     if(y < 0.06){ S.stats.shortcuts = (S.stats.shortcuts||0) + 1; T.pos = Math.min(T.e.d - 1, T.pos + T.e.d * 0.15); flashScreen(255, 220, 120, 220); log('🧭 Vous découvrez un raccourci ! (+15 % du trajet)','g'); }
-    else if(y < 0.13){ const g = ri(0,7); const n = Math.min(6, cap() - load()); const p = Math.round(G[g][1] * 0.55); if(n > 0 && S.gold >= p*n){ S.gold -= p*n; S.inv[g] += n; S.stats.bought[g] += n; S.stats.spentOn[g] += p*n; log('🧳 Marchand ambulant : '+n+'× '+G[g][2]+' '+G[g][0]+' à '+(p*n)+' or.','g'); } else log('🧳 Vous croisez un marchand ambulant.'); }
+    else if(y < 0.13){ const g = ri(0,7); const n = Math.min(6, cap() - load()); const p = Math.round(G[g][1] * 0.55); if(n > 0 && S.gold >= p*n){ S.gold -= p*n; S.inv[g] += n; S.stats.bought[g] += n; S.stats.spentOn[g] += p*n; if(S.lastBuy) S.lastBuy[g] = p; log('🧳 Marchand ambulant : '+n+'× '+G[g][2]+' '+G[g][0]+' à '+(p*n)+' or.','g'); } else log('🧳 Vous croisez un marchand ambulant.'); }
     else if(y < 0.22){ if(S.slow <= 0){ S.slow = 3; flashScreen(150, 130, 90, 320); log('⛈️ Intempéries : vitesse -50 % pendant 3 jours','r'); } }
     else if(y < 0.28){ const o = ri(40, 180 + S.day*2); S.gold += o; flashScreen(255, 200, 80, 260); log('💎 Cache abandonnée : +'+o+' or !','g'); pop('+'+o,'g'); }
   }
