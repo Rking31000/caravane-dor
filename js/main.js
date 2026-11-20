@@ -1,7 +1,24 @@
 // --- UI & RENDU HTML ---
-function pop(t,c){ 
-  if(c=='g'){ ding(988,.04); setTimeout(()=>ding(1319,.035),90); } 
-  if(navigator.vibrate) try{ navigator.vibrate(c=='g'?15:[10,30,10]); }catch(e){} 
+function coinBurst(amount){
+  const box = $('pops'); if(!box) return;
+  const pos = window.camelScreenPos || { x: cv.clientWidth/2, y: cv.clientHeight/2 };
+  const count = Math.max(3, Math.min(11, Math.round((amount||10)/8)));
+  for(let i=0;i<count;i++){
+    const c = document.createElement('div');
+    c.className = 'coin-fx';
+    c.style.left = (pos.x + (Math.random()-.5)*36) + 'px';
+    c.style.top = (pos.y - 12) + 'px';
+    c.style.setProperty('--dx', Math.round((Math.random()-.5)*100) + 'px');
+    c.style.setProperty('--dy', -(45 + Math.random()*75) + 'px');
+    c.style.animationDelay = (Math.random()*.2).toFixed(2) + 's';
+    box.appendChild(c);
+    setTimeout(()=>c.remove(), 1400);
+  }
+}
+function pop(t,c){
+  if(c=='g'){ ding(988,.04); setTimeout(()=>ding(1319,.035),90); }
+  if(navigator.vibrate) try{ navigator.vibrate(c=='g'?15:[10,30,10]); }catch(e){}
+  if(c=='g' && /^\+\d+$/.test(t)) coinBurst(parseInt(t.replace(/\D/g,''),10) || 10); 
   
   const e = document.createElement('div'); 
   e.className = 'pop '+c; 
