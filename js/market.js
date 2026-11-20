@@ -76,7 +76,7 @@ function abandonContract(idx){
 function deliverContract(idx){
   const c = S.contracts[idx]; if(c.state !== 'active' || S.cur !== c.city || S.inv[c.g] < c.n) return;
   S.inv[c.g] -= c.n; S.gold += c.rew; S.C[c.city].rep = Math.min(100, (S.C[c.city].rep||0) + c.repRew); S.stats.contractsDone++;
-  log('✅ Contrat livré : +'+c.rew+' or, +'+c.repRew+' rép. !','g'); pop('+'+c.rew,'g'); ding(1175,.05); setTimeout(()=>ding(1319,.05),100);
+  log('✅ Contrat livré : +'+c.rew+' or, +'+c.repRew+' rép. !','g'); pop('+'+c.rew,'g'); if(typeof flashScreen==='function') flashScreen(255,205,90,320); ding(1175,.05); setTimeout(()=>ding(1319,.05),100);
   c.state = 'empty'; c.regenDay = S.day + ri(4, 8); ui();
 }
 function tickContracts(){
@@ -100,4 +100,4 @@ function checkAutoDeliveries(){
 // Fonctions manquantes réintégrées
 function upg(k){ const p = ucost(k); if(S.gold < p || S.up[k] >= 10) return; S.gold -= p; S.spent += p; S.up[k]++; pop('-'+p,'r'); computeFog(); ui(); }
 function addSub(){ const p = scost(); if(S.gold < p || S.subs.length >= 8) return; const e = pick(S.E); S.gold -= p; S.spent += p; S.subs.push({a:e.a, b:e.b, t:0, cyc:Math.round(e.d/12)+3}); log('🐫 Sous-caravane recrutée : '+S.C[e.a].name+' ↔ '+S.C[e.b].name); pop('-'+p,'r'); ui(); }
-function deliver(){ const c = S.C[S.cur], q = c.q; if(S.travel || S.over || !q || S.inv[q.g] < q.n) return; S.inv[q.g] -= q.n; S.gold += q.rew; pop('+'+q.rew,'g'); log('📜 Quête accomplie à '+c.name+' : +'+q.rew+' or','g'); c.q = null; ui(); }
+function deliver(){ const c = S.C[S.cur], q = c.q; if(S.travel || S.over || !q || S.inv[q.g] < q.n) return; S.inv[q.g] -= q.n; S.gold += q.rew; pop('+'+q.rew,'g'); if(typeof flashScreen==='function') flashScreen(255,205,90,320); log('📜 Quête accomplie à '+c.name+' : +'+q.rew+' or','g'); c.q = null; ui(); }
