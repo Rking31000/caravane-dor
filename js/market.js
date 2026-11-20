@@ -25,7 +25,7 @@ function buy(g,n){
   const c = S.C[S.cur]; let k=0, sp=0;
   while(k<n && load()<cap() && (c.s[g]||0)>=1){
     const p = buyP(c,g); if(S.gold < p) break;
-    S.gold -= p; sp += p; S.inv[g]++; c.s[g]--; k++; S.stats.bought[g]++; S.stats.spentOn[g] += p;
+    S.gold -= p; sp += p; S.inv[g]++; c.s[g]--; k++; S.stats.bought[g]++; S.stats.spentOn[g] += p; if(S.lastBuy) S.lastBuy[g] = p;
   }
   if(k){ pop('-'+sp,'r'); ding(1175,.035); setTimeout(()=>ding(880,.03),90); } ui();
 }

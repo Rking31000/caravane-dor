@@ -2,7 +2,7 @@ function saveGame(){
   if(!S || S.over) return;
   try{
     localStorage.setItem('cd_save', JSON.stringify({
-      S:{C:S.C, E:S.E, cur:S.cur, day:S.day, t:S.t, gold:S.gold, inv:S.inv, water:S.water, food:S.food, up:S.up, subs:S.subs, km:S.km, log:S.log, spent:S.spent, slow:S.slow, stats:S.stats, contracts:S.contracts},
+      S:{C:S.C, E:S.E, cur:S.cur, day:S.day, t:S.t, gold:S.gold, inv:S.inv, lastBuy:S.lastBuy, water:S.water, food:S.food, up:S.up, subs:S.subs, km:S.km, log:S.log, spent:S.spent, slow:S.slow, stats:S.stats, contracts:S.contracts},
       TOTAL, DIFF, meta
     }));
     log('💾 Partie sauvegardée.','g'); pop('💾','g');
@@ -14,6 +14,7 @@ function fixSave(d){
   ['bought','sold','spentOn','earnedOn'].forEach(k => { if(!Array.isArray(St.stats[k])) St.stats[k] = Array(N_GOODS).fill(0); while(St.stats[k].length < N_GOODS) St.stats[k].push(0); });
   ['totalProfit','deals','bestTrade','contractsDone','contractsFailed','crafted','ambushes','repelled','shortcuts','waterBought','foodBought','deaths'].forEach(k => { if(typeof St.stats[k] !== 'number') St.stats[k] = 0; });
   if(!Array.isArray(St.inv)) St.inv = Array(N_GOODS).fill(0); while(St.inv.length < N_GOODS) St.inv.push(0);
+  if(!Array.isArray(St.lastBuy)) St.lastBuy = Array(N_GOODS).fill(0); while(St.lastBuy.length < N_GOODS) St.lastBuy.push(0);
   if(typeof St.water !== 'number' || !isFinite(St.water)) St.water = 20;
   if(typeof St.food !== 'number' || !isFinite(St.food)) St.food = 20;
   St.C.forEach(c => { if(!Array.isArray(c.s)) c.s = Array(N_GOODS).fill(0); while(c.s.length < N_GOODS) c.s.push(0); if(typeof c.rep !== 'number') c.rep = 0; if(typeof c.seen !== 'boolean') c.seen = false; if(typeof c.rumeur !== 'boolean') c.rumeur = false; });
@@ -37,7 +38,7 @@ function loadGame(){
 function autoSave(){
   if(S && !S.over) try{
     localStorage.setItem('cd_save', JSON.stringify({
-      S:{C:S.C, E:S.E, cur:S.cur, day:S.day, t:S.t, gold:S.gold, inv:S.inv, water:S.water, food:S.food, up:S.up, subs:S.subs, km:S.km, log:S.log, spent:S.spent, slow:S.slow, stats:S.stats, contracts:S.contracts},
+      S:{C:S.C, E:S.E, cur:S.cur, day:S.day, t:S.t, gold:S.gold, inv:S.inv, lastBuy:S.lastBuy, water:S.water, food:S.food, up:S.up, subs:S.subs, km:S.km, log:S.log, spent:S.spent, slow:S.slow, stats:S.stats, contracts:S.contracts},
       TOTAL, DIFF, meta
     }));
   }catch(e){}

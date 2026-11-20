@@ -117,7 +117,7 @@
     "Eau": "Water", "Max": "Max", "or/u": "gold/u", "or": "gold", "or ·": "gold ·", "or)": "gold)",
     "Consommation : 1 unité / 20 km · Voyage possible : ": "Consumption: 1 unit / 20 km · Travel range: ",
     "Bien": "Good", "Stock": "Stock", "Achat": "Buy", "Vente": "Sell", "Sac": "Bag", "Tout": "All",
-    "Achat / Vente": "Buy / Sell",
+    "Pachat": "Last buy", "Achat / Vente": "Buy / Sell",
     "Marché fermé.": "Market closed.",
     "⭐ Réputation : ": "⭐ Reputation: ", "Réputation : ": "Reputation: ",
     "Charge : ": "Load: ", "Reste à consommer : ": "Still needed: ",

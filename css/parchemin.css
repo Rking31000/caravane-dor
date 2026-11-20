@@ -178,6 +178,14 @@ h1,
   animation: blink 1s infinite;
 }
 
+/* Colonne mémoire du dernier prix d'achat */
+#panel td.pachat {
+  color: #8a6508;
+  font-weight: bold;
+  background: #f1e4bd66;
+  white-space: nowrap;
+}
+
 /* ---------- 5. PETITES FINITIONS ---------- */
 .overlay-header {
   background-image: radial-gradient(circle at 50% 0, #fff8, transparent 70%);
