@@ -1,3 +1,18 @@
+/* Sélecteur de langue dans le menu */
+.lang-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:2px 0 10px;
+  font-size:13px;
+  color:#5a3a10;
+}
+#lang-toggle{
+  min-width:110px;
+  font-weight:bold;
+}
+
 /* =========================================================
    TUTORIEL GUIDÉ — bulles contextuelles
    ========================================================= */
