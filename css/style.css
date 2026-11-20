@@ -145,11 +145,13 @@ body.shake{animation:screenShake .6s}
    ========================================================= */
 /* 1. Téléphone en mode PORTRAIT (Vertical) */
 @media (max-width: 820px) and (orientation: portrait) {
-  html, body { overflow: auto; height: auto; }
-  body { min-height: 100vh; }
-  .main { display: flex; flex-direction: column; }
-  .canvas-box { flex: none; height: 55vh; min-height: 320px; }
-  .log-box { max-height: 140px; }
+  /* La page occupe exactement l'écran : la carte prend tout l'espace restant. */
+  html, body { height: 100%; height: 100dvh; overflow: hidden; }
+  body { min-height: 0; }
+  .main { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+  .canvas-box { flex: 1 1 auto; height: auto; min-height: 0; }
+  .canvas-box > canvas { min-height: 0; }
+  .log-box { flex-shrink: 0; max-height: 34px; }
   h1 { font-size: 15px; }
   header b { font-size: 13px; }
   header { gap: 4px 8px; padding: 4px 8px; }
@@ -159,22 +161,22 @@ body.shake{animation:screenShake .6s}
 }
 /* 2. Téléphone en mode PAYSAGE (Horizontal / Plein écran) */
 @media (orientation: landscape) and (max-height: 600px) {
-  html, body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; margin: 0; padding: 0; }
+  html, body { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; margin: 0; padding: 0; }
   header { padding: 4px 8px; gap: 4px 8px; flex-shrink: 0; flex-wrap: nowrap; overflow-x: auto; }
   header h1 { font-size: 14px; white-space: nowrap; }
   header span { font-size: 12px; white-space: nowrap; }
   .stat-box { padding: 2px 4px; font-size: 11px; }
   button { padding: 2px 6px; font-size: 11px; }
   .main {
-    display: grid !important;
-    grid-template-columns: 1fr 340px !important;
+    display: flex !important;
+    flex-direction: column;
     flex: 1;
     min-height: 0;
     gap: 4px;
     padding: 4px;
   }
   .left-col { height: 100%; }
-  .canvas-box { height: 100% !important; min-height: 0 !important; padding: 4px; }
+  .canvas-box { flex: 1 1 auto; height: auto !important; min-height: 0 !important; padding: 4px; }
   .log-box { display: none !important; }
   .right-col { display: flex !important; flex-direction: column; height: 100%; }
   .panel-box { flex: 1; min-height: 0; }
