@@ -717,7 +717,16 @@ function draw(){
   drawDust();
 
   const tot = Math.ceil(Math.min(1, load()/cap())*nf*3-.001), E = [{y:pos[1]+8+bob, f:()=>camel(pos[0], pos[1]+8+bob, dir, mv, .75, 0, 0)}];
-  for(let j=0;j<nf;j++){ const d = 38+32*j, fx = pos[0]-CV[0]*d, fy = pos[1]+8-CV[1]*d*.6; E.push({y:fy, f:()=>camel(fx, fy, dir, mv, .5, Math.max(0,Math.min(3,tot-3*j)), j+1)}); }
+  // Formation sur deux lignes : on garde tous les chameaux (récompense visible
+  // des améliorations) sans étirer la file en un interminable cordon.
+  for(let j=0;j<nf;j++){
+    const col = Math.floor(j/2), side = (j%2===0 ? -1 : 1) * 20;
+    const d = 36 + 30*col;
+    const px = -CV[1], py = CV[0]; // vecteur perpendiculaire à la direction
+    const fx = pos[0] - CV[0]*d + px*side;
+    const fy = pos[1] + 8 - CV[1]*d*.6 + py*side;
+    E.push({y:fy, f:()=>camel(fx, fy, dir, mv, .5, Math.max(0,Math.min(3,tot-3*j)), j+1)});
+  }
   E.sort((p,q)=>p.y-q.y).forEach(e => e.f());
   cx.restore();
   
