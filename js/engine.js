@@ -136,8 +136,17 @@ function rollTravelEvent(T){
       let lossGoods = 0, lossName = ''; const owned = [];
       for(let g=0;g<N_GOODS;g++) if(S.inv[g] > 0) owned.push(g);
       if(owned.length > 0){ const g = pick(owned); const qte = Math.max(1, Math.floor(S.inv[g] * (0.15 + R()*0.20))); S.inv[g] -= qte; lossGoods = qte; lossName = G[g][0]; }
-      let msg = '🗡️ Embuscade ! -'+lossGold+' or'; if(lossGoods > 0) msg += ', -'+lossGoods+' '+lossName; log(msg, 'r'); pop('-'+lossGold, 'r'); ui.travelFlash = performance.now();
-      if(typeof showEventPopup === 'function') showEventPopup({ icon:'🗡️', title:'Embuscade !', message:'Une bande de brigands vous attaque sur la route. Vous perdez une partie de votre butin.', effects:['-'+lossGold+' or', lossGoods > 0 ? '-'+lossGoods+' '+lossName : null], tone:'bad' });
+      // Les brigands pillent aussi une partie des provisions
+      const lossWater = S.water > 1 ? Math.max(1, Math.floor(S.water * (0.10 + R()*0.15))) : 0;
+      const lossFood = S.food > 1 ? Math.max(1, Math.floor(S.food * (0.10 + R()*0.15))) : 0;
+      S.water = Math.max(0, S.water - lossWater);
+      S.food = Math.max(0, S.food - lossFood);
+      let msg = '🗡️ Embuscade ! -'+lossGold+' or'; if(lossGoods > 0) msg += ', -'+lossGoods+' '+lossName;
+      const fx = ['-'+lossGold+' or', lossGoods > 0 ? '-'+lossGoods+' '+lossName : null];
+      if(lossWater > 0){ msg += ', -'+lossWater+' 💧'; fx.push('-'+lossWater+' 💧'); }
+      if(lossFood > 0){ msg += ', -'+lossFood+' 🍖'; fx.push('-'+lossFood+' 🍖'); }
+      log(msg, 'r'); pop('-'+lossGold, 'r'); ui.travelFlash = performance.now();
+      if(typeof showEventPopup === 'function') showEventPopup({ icon:'🗡️', title:'Embuscade !', message:'Une bande de brigands vous attaque sur la route. Vous perdez une partie de votre or, de vos marchandises et de vos provisions.', effects:fx, tone:'bad' });
     }
   } else {
     const y = R();
@@ -158,8 +167,8 @@ function rollTravelEvent(T){
     }
     else if(y < 0.22){
       if(S.slow <= 0){
-        S.slow = 3; flashScreen(150, 130, 90, 320); log('⛈️ Intempéries : vitesse -50 % pendant 3 jours','r');
-        if(typeof showEventPopup === 'function') showEventPopup({ icon:'⛈️', title:'Intempéries', message:'Une tempête de sable s’abat sur la caravane et ralentit votre marche.', effects:['Vitesse -50 % pendant 3 jours'], tone:'bad' });
+        S.slow = 1; flashScreen(150, 130, 90, 320); log('⛈️ Intempéries : vitesse -50 % pendant 1 jour','r');
+        if(typeof showEventPopup === 'function') showEventPopup({ icon:'⛈️', title:'Intempéries', message:'Une tempête de sable s’abat sur la caravane et ralentit votre marche.', effects:['Vitesse -50 % pendant 1 jour'], tone:'bad' });
       }
     }
     else if(y < 0.28){
