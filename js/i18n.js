@@ -66,6 +66,7 @@
 
     // Améliorations
     "Capacité": "Capacity", "+15 charges, +1 chameau de bât": "+15 cargo, +1 pack camel",
+    "+15 charges, +1 chameau de bât · +1 💧 +1 🍖 / jour et par bête": "+15 cargo, +1 pack camel · +1 water +1 food / day per beast",
     "Vitesse": "Speed", "+15 % de vitesse": "+15% speed",
     "Gardes": "Guards", "+1 garde anti-bandits": "+1 guard against bandits",
     "Négociation": "Negotiation", "-4 % achat / +4 % vente": "-4% buy / +4% sell",
@@ -261,7 +262,16 @@
     { re: /^\+(\d+)× (.+)$/, en: '+$1× $2' },
     { re: /^-(\d+) 💧$/, en: '-$1 water' },
     { re: /^-(\d+) 🍖$/, en: '-$1 food' },
-    { re: /^-(\d+) (.+)$/, en: '-$1 $2' }
+    { re: /^-(\d+) (.+)$/, en: '-$1 $2' },
+    { re: /^(?:· )?Consommation actuelle : \+(\d+) 💧 \/ \+(\d+) 🍖 par jour$/, en: '· Current consumption: +$1 water / +$2 food per day' },
+    { re: /^niv\. (\d+) — \+15 charges, \+1 chameau de bât · \+1 💧 \+1 🍖 \/ jour et par bête$/, en: 'lvl. $1 — +15 cargo, +1 pack camel · +1 water +1 food / day per beast' },
+    { re: /^niv\. (\d+) — \+15 % de vitesse$/, en: 'lvl. $1 — +15% speed' },
+    { re: /^niv\. (\d+) — \+1 garde anti-bandits$/, en: 'lvl. $1 — +1 guard against bandits' },
+    { re: /^niv\. (\d+) — -4 % achat \/ \+4 % vente$/, en: 'lvl. $1 — -4% buy / +4% sell' },
+    { re: /^niv\. (\d+) — révèle routes, villes, événements$/, en: 'lvl. $1 — reveals roads, cities, events' },
+    { re: /^Améliorer \((\d+) or\)$/, en: 'Upgrade ($1 gold)' },
+    { re: /^Recruter \((\d+) or\)$/, en: 'Recruit ($1 gold)' },
+    { re: /^Sous-caravanes \((\d+)\/(\d+)\)$/, en: 'Sub-caravans ($1/$2)' }
   ];
 
   // Mots isolés (biens, libellés courts), appliqués en dernier.
