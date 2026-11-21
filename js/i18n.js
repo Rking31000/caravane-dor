@@ -78,7 +78,8 @@
     "🛡️ Une bande de brigands est repoussée par vos gardes !": "🛡️ A band of brigands is driven off by your guards!",
     "🧭 Vous découvrez un raccourci ! (+15 % du trajet)": "🧭 You found a shortcut! (+15% of the trip)",
     "🧳 Vous croisez un marchand ambulant.": "🧳 You meet a traveling merchant.",
-    "⛈️ Intempéries : vitesse -50 % pendant 3 jours": "⛈️ Bad weather: speed -50% for 3 days",
+    "⛈️ Intempéries : vitesse -50 % pendant 1 jour": "⛈️ Bad weather: speed -50% for 1 day",
+    "Vitesse -50 % pendant 1 jour": "Speed -50% for 1 day",
     "⚠️ Provisions faibles ! Achetez eau/nourriture ici.": "⚠️ Low supplies! Buy water/food here.",
     "🐫 Sous-caravane pillée.": "🐫 Sub-caravan plundered.",
     "⚠️ Erreur : ": "⚠️ Error: ",
@@ -182,7 +183,7 @@
     "Une bande de brigands a attaqué votre caravane, mais vos gardes les ont mis en fuite.": "A band of brigands attacked your caravan, but your guards drove them away.",
     "Aucune perte": "No losses",
     "Embuscade !": "Ambush!",
-    "Une bande de brigands vous attaque sur la route. Vous perdez une partie de votre butin.": "A band of brigands attacks you on the road. You lose part of your loot.",
+    "Une bande de brigands vous attaque sur la route. Vous perdez une partie de votre or, de vos marchandises et de vos provisions.": "A band of brigands attacks you on the road. You lose part of your gold, your goods and your supplies.",
     "Raccourci découvert !": "Shortcut found!",
     "Un chemin plus court s’offre à vous : la caravane gagne du terrain sans consommer plus de provisions.": "A shorter path opens up: the caravan gains ground without using more supplies.",
     "Marchand ambulant": "Traveling merchant",
@@ -208,6 +209,8 @@
   var PATTERNS = [
     { re: /^Votre caravane quitte (.+)\. Bonne route, marchand !$/, en: 'Your caravan leaves $1. Safe travels, merchant!' },
     { re: /^➡️ Départ vers (.+) \((\d+) km, (.+)\)$/, en: '➡️ Departing for $1 ($2 km, $3)' },
+    { re: /^🗡️ Embuscade ! -(\d+) or, -(\d+) (.+), -(\d+) 💧, -(\d+) 🍖$/, en: '⚔️ Ambush! -$1 gold, -$2 $3, -$4 water, -$5 food' },
+    { re: /^🗡️ Embuscade ! -(\d+) or, -(\d+) 💧, -(\d+) 🍖$/, en: '⚔️ Ambush! -$1 gold, -$2 water, -$3 food' },
     { re: /^🗡️ Embuscade ! -(\d+) or, -(\d+) (.+)$/, en: '⚔️ Ambush! -$1 gold, -$2 $3' },
     { re: /^🗡️ Embuscade ! -(\d+) or$/, en: '⚔️ Ambush! -$1 gold' },
     { re: /^🧳 Marchand ambulant : (\d+)× (\S+) (.+) à (\d+) or\.$/, en: '🧳 Traveling merchant: $1× $2 $3 for $4 gold.' },
@@ -256,6 +259,8 @@
     { re: /^-(\d+) or$/, en: '-$1 gold' },
     { re: /^\+(\d+) or$/, en: '+$1 gold' },
     { re: /^\+(\d+)× (.+)$/, en: '+$1× $2' },
+    { re: /^-(\d+) 💧$/, en: '-$1 water' },
+    { re: /^-(\d+) 🍖$/, en: '-$1 food' },
     { re: /^-(\d+) (.+)$/, en: '-$1 $2' }
   ];
 
