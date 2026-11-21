@@ -175,6 +175,24 @@
     "Cliquez sur une ville de la carte puis sur « Voyager ▶ », ou double-cliquez directement dessus. Sur mobile, pincez deux doigts pour zoomer. Bon voyage, marchand !": "Click a city on the map then \"Travel ▶\", or double-click it directly. On mobile, pinch two fingers to zoom. Safe travels, merchant!",
     "🐪 En route vers ": "🐪 Traveling to ",
     "🔨 Ateliers": "🔨 Workshops", "📜 Contrats": "📜 Contracts", "📜 Journal": "📜 Log",
+
+    // Fenêtres d'événements de route
+    "Continuer ▶": "Continue ▶",
+    "Brigands repoussés !": "Brigands driven off!",
+    "Une bande de brigands a attaqué votre caravane, mais vos gardes les ont mis en fuite.": "A band of brigands attacked your caravan, but your guards drove them away.",
+    "Aucune perte": "No losses",
+    "Embuscade !": "Ambush!",
+    "Une bande de brigands vous attaque sur la route. Vous perdez une partie de votre butin.": "A band of brigands attacks you on the road. You lose part of your loot.",
+    "Raccourci découvert !": "Shortcut found!",
+    "Un chemin plus court s’offre à vous : la caravane gagne du terrain sans consommer plus de provisions.": "A shorter path opens up: the caravan gains ground without using more supplies.",
+    "Marchand ambulant": "Traveling merchant",
+    "Un marchand ambulant vous propose sa marchandise à prix réduit.": "A traveling merchant offers his goods at a reduced price.",
+    "Vous croisez un marchand ambulant, mais vous n’avez ni la place ni l’or nécessaire pour acheter.": "You meet a traveling merchant, but you have neither space nor enough gold to buy anything.",
+    "Aucun échange": "No trade",
+    "Intempéries": "Bad weather",
+    "Une tempête de sable s’abat sur la caravane et ralentit votre marche.": "A sandstorm hits the caravan and slows your progress.",
+    "Cache abandonnée !": "Abandoned cache!",
+    "Vous trouvez une cache oubliée au bord de la route, pleine de pièces d’or.": "You find a forgotten cache by the roadside, full of gold coins.",
     "à": "to",
     "🌄 Aube": "🌄 Dawn", "🌅 Matin": "🌅 Morning", "☀️ Jour": "☀️ Day",
     "🌤️ Après-midi": "🌤️ Afternoon", "🌆 Crépuscule": "🌆 Dusk",
@@ -234,7 +252,11 @@
     { re: /^Stock : (\d+) \/ (\d+)$/, en: 'Stock: $1 / $2' },
     { re: /^marge ([+-]?\d+)$/, en: 'margin $1' },
     { re: /^Étape (\d+) \/ (\d+)$/, en: 'Step $1 / $2' },
-    { re: /^J(\d+)$/, en: 'D$1' }
+    { re: /^J(\d+)$/, en: 'D$1' },
+    { re: /^-(\d+) or$/, en: '-$1 gold' },
+    { re: /^\+(\d+) or$/, en: '+$1 gold' },
+    { re: /^\+(\d+)× (.+)$/, en: '+$1× $2' },
+    { re: /^-(\d+) (.+)$/, en: '-$1 $2' }
   ];
 
   // Mots isolés (biens, libellés courts), appliqués en dernier.
