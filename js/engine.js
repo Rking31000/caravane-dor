@@ -17,7 +17,7 @@ const SUPPLY_START = 20;
 const SUPPLY_RATE = 0.05;
 const BI={désert:{c:'#d8b25c',p:[4,6],d:[0,1]},forêt:{c:'#6f9a4a',p:[1,0],d:[3,7]},côtière:{c:'#5a9ab0',p:[5,0],d:[3,1]},montagne:{c:'#9a8f86',p:[3,6],d:[0,2]},plaine:{c:'#a9bf5a',p:[0,2],d:[4,5]}};
 const SZ=['village','bourg','cité','métropole'],SF=[.6,1,1.5,2.2],TS={plaine:1,forêt:.8,montagne:.55,désert:.7,côte:.95},TT=Object.keys(TS);
-const U=[['cap','Capacité','+15 charges, +1 chameau de bât',120],['spd','Vitesse','+15 % de vitesse',150],['grd','Gardes','+1 garde anti-bandits',100],['neg','Négociation','-4 % achat / +4 % vente',140],['sc','Éclaireurs','révèle routes, villes, événements',130]];
+const U=[['cap','Capacité','+15 charges, +1 chameau de bât · +1 💧 +1 🍖 / jour et par bête',120],['spd','Vitesse','+15 % de vitesse',150],['grd','Gardes','+1 garde anti-bandits',100],['neg','Négociation','-4 % achat / +4 % vente',140],['sc','Éclaireurs','révèle routes, villes, événements',130]];
 const EVN={fest:'🎉 Festival',fam:'🌾 Famine',war:'⚔️ Guerre',epi:'☣️ Épidémie'};
 
 // --- ÉTAT GLOBAL ---
@@ -211,6 +211,12 @@ function step(dt){
 
 function dayTick(){
   S.day++; if(S.slow>0) S.slow--;
+  // Chaque bête de somme supplémentaire consomme 1 eau et 1 nourriture par jour.
+  if(S.up.cap > 0){
+    S.water = Math.max(0, S.water - S.up.cap);
+    S.food = Math.max(0, S.food - S.up.cap);
+    if(checkDeath()) return;
+  }
   S.C.forEach(c => {
     for(let g=0;g<N_NAT;g++) c.s[g] = Math.max(0, c.s[g] + (eq(c,g)-c.s[g])*.06 + (R()-.5)*.6);
     if(c.ev && --c.ev.left <= 0){ log('Fin : '+EVN[c.ev.t]+' à '+c.name); c.ev = null; }
