@@ -119,7 +119,13 @@ function ui(){
       html = htmlAteliers(); 
   }
   else if(tab == 'u'){ 
-      html = U.map(u => '<p><b>'+u[1]+'</b> niv. '+S.up[u[0]]+' — '+u[2]+'<br><button '+(S.gold<ucost(u[0])||S.up[u[0]]>=10?'disabled':'')+' onclick="upg(\''+u[0]+'\')">Améliorer ('+ucost(u[0])+' or)</button></p>').join('')+'<p><b>Sous-caravanes</b> ('+S.subs.length+'/8)<br>'+S.subs.map(s => '<small>'+S.C[s.a].name+' ↔ '+S.C[s.b].name+'</small>').join('<br>')+'<br><button '+(S.gold<scost()||S.subs.length>=8?'disabled':'')+' onclick="addSub()">Recruter ('+scost()+' or)</button></p>'; 
+      html = U.map(u => {
+        const lvl = S.up[u[0]];
+        const total = (u[0] === 'cap' && lvl > 0)
+          ? '<br><span class="r" style="font-weight:bold">· Consommation actuelle : +'+lvl+' 💧 / +'+lvl+' 🍖 par jour</span>'
+          : '';
+        return '<p><b>'+u[1]+'</b> niv. '+lvl+' — '+u[2]+total+'<br><button '+(S.gold<ucost(u[0])||lvl>=10?'disabled':'')+' onclick="upg(\''+u[0]+'\')">Améliorer ('+ucost(u[0])+' or)</button></p>';
+      }).join('')+'<p><b>Sous-caravanes</b> ('+S.subs.length+'/8)<br>'+S.subs.map(s => '<small>'+S.C[s.a].name+' ↔ '+S.C[s.b].name+'</small>').join('<br>')+'<br><button '+(S.gold<scost()||S.subs.length>=8?'disabled':'')+' onclick="addSub()">Recruter ('+scost()+' or)</button></p>'; 
   }
   else { 
       const st = S.stats; 
